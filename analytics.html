@@ -1,24 +1,25 @@
-<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Crimson+Text" />
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Crimson+Text" />
 <style>
     body {
         background:#232323;
         color: white;
         font-family: Arial;
         margin: 1%;
+        height: 1080px;
     }
 
     h2 {
-        font-size: 40pt;
+        font-size: 5em;
         margin: 0;
     }
-    
+
     h3 {
-        font-size: 25pt;
+        font-size: 3.3em;
         margin: 0;
     }
-    
+
     p {
-        font-size: 60pt;
+        font-size: 6.3em;
         padding-left: 5%;
         font-weight: 700;
         margin: 0;
@@ -44,7 +45,7 @@
         flex:1;
         margin: auto;
         padding-left: 3%;
-        font-size:20pt;
+        font-size:2em;
 
     }
 
@@ -52,7 +53,7 @@
         flex:2;
         text-align: center;
         margin: auto;
-        font-size:40pt;
+        font-size:3.3em;
     }
 
     #time {
@@ -60,7 +61,7 @@
         margin: auto;
         padding-right: 3%;
         text-align: right;
-        font-size: 20pt;
+        font-size: 2em;
     }
 
 
@@ -84,7 +85,7 @@
     }
 
     #stats-time-range {
-        margin-top: 0;
+        font-size: 4em;
     }
 
     .right-half{
@@ -95,35 +96,61 @@
         margin-left: 1%;
     }
 
-    ol {
-        padding-left: 5%;
-
-    }
-
-    li {
+    li, .view  {
         font-family: "crimson-text";
-        font-size: 30pt;
-        margin: .5em 0;
+        font-size: 3em;
+        margin: 1.6em 0;
     }
+    
 
     img {
-        font-size: 10pt; 
+        font-size: 12px;
+    }
+
+    .articles {
+        display:flex;
+        justify-content: space-between;
+    }
+
+    ol {
+        flex:4;
+        margin: 0;
+    }
+
+    .views {
+        flex:1;
+    }
+
+    .left-text {
+        text-align: left;
+    }
+    .right-text {
+        text-align: right;
+        font-family: arial;
+    }
+
+    .left-text, .right-text {
+        display: inline-block;
+        width: 46.8%;
+
     }
 
 </style>
 
 <body>
+
+
     <div class="title-bar box">
         <div id="date">Tuesday, February 14, 2017</div>
         <div id="title">Analytics Dashboard</div>
-        <div id="time">3:04pm</div>
+        <div id="time"><img src="#" alt="Clock icon">3:04pm</div>
     </div>
 
     <div class="container">
         <div class="left-half">
-            <div id="stats-time-range" class="box"> <h3> Statistics from the Past Hour</h3> </div>
+            <div class="box"> <h3> Statistics from: </h3> <hr/> <p id="stats-time-range">Past Hour</p></div>
             <div id="current-users" class="box">
-                <h3><img src="#" alt="People icon"> Users currently on site </h3>
+                <h3><img src="#" alt="People icon"> Currently on site </h3>
                 <hr/>
                 <p> 213 </p>
             </div>
@@ -141,15 +168,39 @@
         <div class="right-half box">
             <h2><img src="#" alt="Book Icon">Top 5 Stories  </h2>
             <hr/>
-            <ol>
-                <li>Poetry Slams: By and for Vancouver's...</li>
-                <li>Is the 24-hour business dying?</li>
-                <li>This is number 3 on the list </li>
-                <li>A guide to hunting for vinyl in...</li>
-                <li>10th Annual AMS Block Party lineup...</li>
-            </ol>
+            <div class="articles">
+                <ol>
+                    <li>Poetry Slams: By and for Vancouver'...</li>
+                    <li>Is the 24-hour business dying?</li>
+                    <li>This is number 3 on the list </li>
+                    <li>A guide to hunting for vinyl in Vanc...</li>
+                    <li>10th Annual AMS Block Party lineu...</li>
+                </ol>
+                <div class="views">
+                    <div class="view">
+                        <div class="left-text"><img src="#" alt="Eye icon"></div>
+                        <div id="article-1" class="right-text">9001</div>
+                    </div>
+                    <div class="view">
+                        <div class="left-text"><img src="#" alt="Eye icon"></div>
+                        <div id="article-2" class="right-text">452</div>
+                    </div>
+                    <div class="view">
+                        <div class="left-text"><img src="#" alt="Eye icon"></div>
+                        <div id="article-3" class="right-text">231</div>
+                    </div>
+                    <div class="view">
+                        <div class="left-text"><img src="#" alt="Eye icon"></div>
+                        <div id="article-4" class="right-text">14</div>
+                    </div>
+                    <div class="view">
+                        <div class="left-text"><img src="#" alt="Eye icon"></div>
+                        <div id="article-5" class="right-text">9</div>
+                    </div>
+
+                </div>
+            </div>
         </div>
 
     </div>
-
 </body>
