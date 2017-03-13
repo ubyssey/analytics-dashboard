@@ -22,15 +22,15 @@ function updateTopArticles() {
     var counter = 0;
 
     while (i < 6) {
-        title = data[counter][0];
-        views = data[counter][3];
-        article_hour = parseInt(data[counter][2]);
-        if (article_hour == hour) {
-          $('ol li:nth-child('+i+')').html(title);
-          $('#article-' + i).html(views);
-          i++;
-        }
-        counter++;
+      title = data[counter][0];
+      views = data[counter][3];
+      article_hour = parseInt(data[counter][2]);
+      if (article_hour == hour) {
+        $('ol li:nth-child('+i+')').html(title);
+        $('#article-' + i).html(views);
+        i++;
+      }
+      counter++;
     }
 
   }
