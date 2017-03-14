@@ -15,7 +15,7 @@ function pageviewTotalsPerHour() {
     dataType: 'jsonp',
     success: function(data) {
       var hour = new Date(Date.now()).getHours()
-      var pageviews = data.rGOows[hour][1]
+      var pageviews = data.rows[hour][1]
       $('#page-views p').html(pageviews)
     }
   })
