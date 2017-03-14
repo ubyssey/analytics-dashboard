@@ -1,0 +1,114 @@
+body {
+    background:#232323;
+    color: white;
+    font-family: Arial;
+    margin: 1%;
+    height: 1080px;
+}
+
+h2 {
+    font-size: 5em;
+    margin: 0;
+}
+
+h3 {
+    font-size: 3.3em;
+    margin: 0;
+}
+
+p {
+    font-size: 6.3em;
+    padding-left: 5%;
+    font-weight: 700;
+    margin: 0;
+}
+
+.title-bar {
+    display:flex;
+    height: 11%;
+    margin-bottom: 1%;
+}
+
+.title-bar div {
+    justify-content: center;
+    font-family: "Crimson Text";
+
+}
+
+.box {
+    background:#3a3a3a;
+}
+
+#date {
+    flex:1;
+    margin: auto;
+    padding-left: 3%;
+    font-size:2em;
+
+}
+
+#title {
+    flex:2;
+    text-align: center;
+    margin: auto;
+    font-size:3.3em;
+}
+
+#time {
+    flex:1;
+    margin: auto;
+    padding-right: 3%;
+    text-align: right;
+    font-size: 2em;
+}
+
+
+.container {
+    clear:both;
+    display:flex;
+}
+
+.left-half{
+    flex:2;
+    order:1;
+    display:flex;
+    flex-direction:column;
+    justify-content: space-between;
+}
+
+.left-half div {
+    justify-content: space-around;
+    padding: 2% 4%;
+}
+
+#stats-time-range {
+    font-size: 4em;
+}
+
+.right-half{
+    flex:3;
+    order:1;
+    padding:1% 3%;
+    height: 80%;
+    margin-left: 1%;
+}
+
+.articles {
+    margin-top: 2em;
+}
+
+.article {
+    display:flex;
+    font-size: 2.9em;
+    margin-bottom: 0.8em;
+}
+
+.title {
+    flex:1;
+    font-family: crimson-text;
+}
+
+.view {
+    margin-left: 0.7em;
+}
+
