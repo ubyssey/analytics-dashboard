@@ -1,6 +1,5 @@
 function updateTopArticles() {
 
-
   var url = 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICA7a2SCgw&format=json';
 
   $.ajax({
@@ -13,14 +12,14 @@ function updateTopArticles() {
   });
 
   function renderHTML(data) {
-    var date = new Date(Date.now());
+    var date = new Date();
     var hour = date.getHours();
-    var title = '';
-    var views = '';
+    var title, views;
+
     var i = 1;
     var counter = 0;
 
-    while (i < 6) {
+    while (i < 6 && counter < data.length) {
       title = data[counter][0];
       views = data[counter][3];
       article_hour = parseInt(data[counter][2]);
