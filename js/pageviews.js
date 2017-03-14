@@ -14,7 +14,7 @@ function pageviewTotalsPerHour() {
     url: viewsPerHour,
     dataType: 'jsonp',
     success: function(data) {
-      var hour = new Date(Date.now()).getHours()
+      var hour = new Date().getHours()
       var pageviews = data.rows[hour][1]
       $('#page-views p').html(pageviews)
     }
