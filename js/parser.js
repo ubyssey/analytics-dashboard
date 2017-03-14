@@ -8,7 +8,7 @@ $(function() {
 $.ajax({
     type: 'GET',
     url: 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICAgICACgw&format=json',
-	dataType: 'jsonp'
+	dataType: 'jsonp',
     success: function(data) {
         var d = new Date();
         var hour = d.getHours();
