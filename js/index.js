@@ -7,6 +7,9 @@ var ENDPOINTS = {
   },
   'articles': {
     'hour': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICA7a2SCgw&format=json'
+  },
+  'currentUsers': {
+    'realTime': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICA67iPCgw&format=json'
   }
 };
 
@@ -38,6 +41,19 @@ function updateUsers() {
         $('#user-visits > p').html(data.rows[hour][1]);
       }
     });
+  });
+}
+
+function updateCurrentUsers() {
+    $.ajax({
+    type: 'GET',
+    url: ENDPOINTS.currentUsers.realTime,
+    dataType: 'jsonp',
+    success: function(data) {
+      var lastElemRows = data.rows.length - 1;
+      var currentUsers = data.rows[lastElemRows][3];
+      $('#current-users > p').html(currentUsers);
+    }
   });
 }
 
@@ -75,6 +91,7 @@ function updateArticles() {
   }
 }
 
+
 function updateClock() {
   var curTime = new Date();
 
@@ -89,6 +106,7 @@ function updateData() {
   updateUsers();
   updatePageviews()
   updateArticles();
+  updateCurrentUsers();
 }
 
 // This runs once the page is ready to be loaded.
