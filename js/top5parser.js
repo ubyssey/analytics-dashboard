@@ -25,8 +25,8 @@
                         views = data[counter][3];
                         article_hour = parseInt(data[counter][2]);
                         if (article_hour == hour) {
-                            $("ol li:nth-child("+i+")").html(title);
-                            $("#article-" + i).html(views);
+                            $("#article-title-"+ i).html(i + ". " + title);
+                            $("#article-view-" + i).html(views + "  <i class=\"fa fa-eye\" aria-hidden=\"true\"></i>");
                             i++;
                         }
                         counter++;
