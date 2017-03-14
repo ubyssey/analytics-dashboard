@@ -2,66 +2,64 @@
     <head>
         <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Crimson+Text" />
         <link rel="stylesheet" type="text/css" href="stylesheet.css">
+        <script src="https://use.fontawesome.com/432212f1dd.js"></script>
     </head>
     <body>
         <div class="title-bar box">
             <div id="date">Tuesday, February 14, 2017</div>
             <div id="title">Analytics Dashboard</div>
-            <div id="time"><img src="#" alt="Clock icon">3:04pm</div>
+            <div id="time"><i class="fa fa-clock-o" aria-hidden="true"></i>
+3:04pm</div>
         </div>
 
         <div class="container">
             <div class="left-half">
-                <div class="box"> <h3> Statistics from: </h3> <hr/> <p id="stats-time-range">Past Hour</p></div>
                 <div id="current-users" class="box">
-                    <h3><img src="#" alt="People icon"> Currently on site </h3>
+                    <h3><i class="fa fa-users" aria-hidden="true"></i> Currently on site </h3>
                     <hr/>
                     <p> 213 </p>
                 </div>
+                <div class="box"> <h3> Statistics from: </h3> <hr/> <p id="stats-time-range">Past Hour</p></div>
+
                 <div id="user-visits" class="box">
-                    <h3><img src="#" alt="People icon"> User Visits </h3>
+                    <h3><i class="fa fa-users" aria-hidden="true"></i> User Visits </h3>
                     <hr/>
                     <p> 138 </p> 
                 </div>
                 <div id="page-views" class="box">
-                    <h3><img src="#" alt="Eye icon"> Page Views </h3>
+                    <h3><i class="fa fa-eye" aria-hidden="true"></i> Page Views </h3>
                     <hr/>
                     <p> 324 </p>
                 </div>
             </div>
             <div class="right-half box">
-                <h2><img src="#" alt="Book Icon">Top 5 Stories  </h2>
+                <h2><i class="fa fa-book" aria-hidden="true"></i>Top 5 Stories  </h2>
                 <hr/>
                 <div class="articles">
-                    <ol>
-                        <li>Poetry Slams: By and for Vancouver'...</li>
-                        <li>Is the 24-hour business dying?</li>
-                        <li>This is number 3 on the list </li>
-                        <li>A guide to hunting for vinyl in Vanc...</li>
-                        <li>10th Annual AMS Block Party lineu...</li>
-                    </ol>
-                    <div class="views">
-                        <div class="view">
-                            <div class="left-text"><img src="#" alt="Eye icon"></div>
-                            <div id="article-1" class="right-text">9001</div>
-                        </div>
-                        <div class="view">
-                            <div class="left-text"><img src="#" alt="Eye icon"></div>
-                            <div id="article-2" class="right-text">452</div>
-                        </div>
-                        <div class="view">
-                            <div class="left-text"><img src="#" alt="Eye icon"></div>
-                            <div id="article-3" class="right-text">231</div>
-                        </div>
-                        <div class="view">
-                            <div class="left-text"><img src="#" alt="Eye icon"></div>
-                            <div id="article-4" class="right-text">14</div>
-                        </div>
-                        <div class="view">
-                            <div class="left-text"><img src="#" alt="Eye icon"></div>
-                            <div id="article-5" class="right-text">9</div>
-                        </div>
-
+                    <div class="article">
+                        <div class="title" id="article-title-1">1. The quick brown fox jumps over the lazy dog</div>
+                        <div class="view" id="article-view-1">888888<i class="fa fa-eye" aria-hidden="true"></i>
+</div>
+                    </div>
+                    <div class="article">
+                        <div class="title" id="article-title-2">2. The quick brown fox jumps over the lazy</div>
+                        <div class="view" id="article-view-2">888888<i class="fa fa-eye" aria-hidden="true"></i>
+</div>
+                    </div>
+                    <div class="article">
+                        <div class="title" id="article-title-3">3. The quick brown fox jumps over the lazy </div>
+                        <div class="view" id="article-view-3">888888<i class="fa fa-eye" aria-hidden="true"></i>
+</div>
+                    </div>
+                    <div class="article">
+                        <div class="title" id="article-title-4">4. The quick brown fox jumps over the lazy dog</div>
+                        <div class="view" id="article-view-4">888888<i class="fa fa-eye" aria-hidden="true"></i>
+</div>
+                    </div>
+                    <div class="article">
+                        <div class="title" id="article-title-5">5. The quick brown fox jumps over the lazy dog</div>
+                        <div class="view" id="article-view-5">888888<i class="fa fa-eye" aria-hidden="true"></i>
+</div>
                     </div>
                 </div>
             </div>
