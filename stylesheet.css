@@ -78,7 +78,6 @@ p {
 
 .left-half div {
     justify-content: space-around;
-    margin: 1%;
     padding: 2% 4%;
 }
 
@@ -94,42 +93,22 @@ p {
     margin-left: 1%;
 }
 
-li, .view  {
-    font-family: "crimson-text";
-    font-size: 3em;
-    margin: 1.6em 0;
-}
-
-
-img {
-    font-size: 12px;
-}
-
 .articles {
+    margin-top: 2em;
+}
+
+.article {
     display:flex;
-    justify-content: space-between;
+    font-size: 2.9em;
+    margin-bottom: 0.8em;
 }
 
-ol {
-    flex:4;
-    margin: 0;
-}
-
-.views {
+.title {
     flex:1;
+    font-family: crimson-text;
 }
 
-.left-text {
-    text-align: left;
-}
-.right-text {
-    text-align: right;
-    font-family: arial;
-}
-
-.left-text, .right-text {
-    display: inline-block;
-    width: 46.8%;
-
+.view {
+    margin-left: 0.7em;
 }
 
