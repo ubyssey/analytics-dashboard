@@ -12,9 +12,9 @@ $.ajax({
     success: function(data) {
         var d = new Date();
         var hour = d.getHours();
-        var temp = JSON.parse(data);
-        $usersite.append(temp.rows[hour][1]);
+        $usersite.append(data.rows[hour][1]);
     }
 });
 });
 }
+updateUsersOnSite();
