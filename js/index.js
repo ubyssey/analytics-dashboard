@@ -75,6 +75,16 @@ function updateArticles() {
   }
 }
 
+function updateClock() {
+  var curTime = new Date();
+
+  var curDate = moment().format('dddd MMMM Do YYYY');
+  var curTime = moment().format('h:mm a');
+
+  $('#date').html(curDate);
+  $('#time > span').html(curTime);
+}
+
 function updateData() {
   updateUsers();
   updatePageviews()
@@ -85,4 +95,7 @@ function updateData() {
 $(document).ready(function() {
   updateData();
   setInterval(updateData, 5000);
+
+  updateClock();
+  setInterval(updateClock, 1000);
 });
