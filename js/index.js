@@ -57,6 +57,9 @@ function updateCurrentUsers() {
   });
 }
 
+/* Filters the articles to grab the appropriate ones for the alloted time slot.
+ * Sums the views of those articles, then sorts by view count, then updates the HTML. 
+ */
 function updateArticles() {
 
   $.ajax({
@@ -78,9 +81,9 @@ function updateArticles() {
       // Uses the past day Json file and filters top articles from past 60 minutes.
       case "hour":
         var filtered = data.filter(function (a) {
-          var articleHour = a[2];
-          var articleMinute = a[3];
-          return (articleHour==hour-1 && articleMinute>=minute || articleHour==hour);
+          var articleHour = Number(a[2]);
+          var articleMinute = Number(a[3]);
+          return (articleHour === hour-1 && articleMinute >= minute || articleHour === hour);
         });
         break;
 
@@ -88,28 +91,27 @@ function updateArticles() {
       case "day":
 
         var filtered = data.filter(function (a) {
-          var articleHour = a[2];
-          var articleDay = a[3];
-          return (articleDay==day-1 && articleHour>=hour || articleDay==day);
+          var articleHour = Number(a[2]);
+          var articleDay = Number(a[3]);
+          return (articleDay === day-1 && articleHour >= hour || articleDay === day);
         });   
-        console.log(filtered);
         break;
-        
+
       // Displays past 7 day's top articles. Does not need to be filtered.
       default:
         var filtered = data;
-        
+
     }
-    
+
     // Adds the views together.
     var toPrint = sumOfFiltered(filtered);
-    
+
     toPrint.sort((function(a,b) {
       return b[4] - a[4];
     }));
     update(toPrint);
 
-    
+
     // Adds the views and returns to toPrint.
     function sumOfFiltered(filtered) {
       var i, j;
@@ -118,7 +120,7 @@ function updateArticles() {
         var bool = false;
         var title = filtered[i][1];
         for(j = 0; j < toPrint.length; j++) {
-          if (toPrint[j][1] == title) {
+          if (toPrint[j][1] === title) {
             bool = true;
             break;
           }
@@ -163,8 +165,10 @@ function updateData() {
   updateCurrentUsers();
 }
 
+
 // This runs once the page is ready to be loaded.
 $(document).ready(function() {
+  var time = "week";
   updateData();
   setInterval(updateData, 5000);
 
