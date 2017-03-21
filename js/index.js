@@ -80,8 +80,8 @@ function updateArticles(time) {
     var day = date.getDay();
     var hour = date.getHours();
     var minute = date.getMinutes();
-    switch(time) {
 
+    switch(time) {
       // Uses the past day Json file and filters top articles from past 60 minutes.
       case "hour":
         var filtered = data.filter(function (a) {
