@@ -35,7 +35,7 @@ function updateUsers() {
     $.ajax({
       type: 'GET',
       url: ENDPOINTS.users.hour,
-	    dataType: 'jsonp',
+      dataType: 'jsonp',
       success: function(data) {
         var hour = new Date().getHours();
         $('#user-visits > p').html(data.rows[hour][1]);
@@ -45,7 +45,7 @@ function updateUsers() {
 }
 
 function updateCurrentUsers() {
-    $.ajax({
+  $.ajax({
     type: 'GET',
     url: ENDPOINTS.currentUsers.realTime,
     dataType: 'jsonp',
@@ -70,24 +70,78 @@ function updateArticles() {
 
   function renderHTML(data) {
     var date = new Date();
+    var day = date.getDay();
     var hour = date.getHours();
-    var title, views;
+    var minute = date.getMinutes();
+    switch("hour") {
 
-    var i = 1;
-    var counter = 0;
+      // Uses the past day Json file and filters top articles from past 60 minutes.
+      case "hour":
+        var filtered = data.filter(function (a) {
+          var articleHour = a[2];
+          var articleMinute = a[3];
+          return (articleHour==hour-1 && articleMinute>=minute || articleHour==hour);
+        });
+        break;
 
-    while (i < 6 && counter < data.length) {
-      title = data[counter][0];
-      views = data[counter][3];
-      article_hour = parseInt(data[counter][2]);
-      if (article_hour == hour) {
-        $("#article-title-"+ i).html(i + ". " + title);
-        $("#article-view-" + i).html(views + "  <i class=\"fa fa-eye\" aria-hidden=\"true\"></i>");
-        i++;
+      // Uses the past 7 days Json file and filters top articles from past 24 hours.
+      case "day":
+
+        var filtered = data.filter(function (a) {
+          var articleHour = a[2];
+          var articleDay = a[3];
+          return (articleDay==day-1 && articleHour>=hour || articleDay==day);
+        });   
+        console.log(filtered);
+        break;
+        
+      // Displays past 7 day's top articles. Does not need to be filtered.
+      default:
+        var filtered = data;
+        
+    }
+    
+    // Adds the views together.
+    var toPrint = sumOfFiltered(filtered);
+    
+    toPrint.sort((function(a,b) {
+      return b[4] - a[4];
+    }));
+    update(toPrint);
+
+    
+    // Adds the views and returns to toPrint.
+    function sumOfFiltered(filtered) {
+      var i, j;
+      toPrint = [];
+      for (i = 0; i < filtered.length; i++) {
+        var bool = false;
+        var title = filtered[i][1];
+        for(j = 0; j < toPrint.length; j++) {
+          if (toPrint[j][1] == title) {
+            bool = true;
+            break;
+          }
+        }
+        if (bool) {
+          var n = parseInt(toPrint[j][4]) + parseInt(filtered[i][4]);
+          toPrint[j][4] = n.toString();
+        } else {
+          toPrint.push(filtered[i]);
+        }
       }
-      counter++;
+      return toPrint;
     }
 
+    // Updates the HTML.
+    function update(toPrint) {
+      for (var i = 1; i <= 5; i++) {
+        title = toPrint[i-1][1];
+        views = toPrint[i-1][4];
+        $("#article-title-"+ i).html(i + ". " + title);
+        $("#article-view-" + i).html(views + "  <i class=\"fa fa-eye\" aria-hidden=\"true\"></i>");
+      }
+    }
   }
 }
 
@@ -104,7 +158,7 @@ function updateClock() {
 
 function updateData() {
   updateUsers();
-  updatePageviews()
+  updatePageviews();
   updateArticles();
   updateCurrentUsers();
 }
