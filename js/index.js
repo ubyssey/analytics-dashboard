@@ -71,11 +71,11 @@ function updateArticles(time) {
       url: ENDPOINTS.articles[time],
       dataType: 'jsonp',
       success: function(data) {
-        renderHTML(data.rows);
+        renderHTML(data.rows, time);
       }
     });
   
-  function renderHTML(data) {
+  function renderHTML(data, time) {
     var date = new Date();
     var day = date.getDay();
     var hour = date.getHours();
