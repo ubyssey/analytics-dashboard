@@ -44,7 +44,7 @@ function updateUsers(time) {
   });
 }
 
-function updateCurrentUsers() {
+function updateCurrentUsers(time) {
   $.ajax({
     type: 'GET',
     url: ENDPOINTS.currentUsers.realTime,
@@ -122,9 +122,11 @@ function updateTimePeriod(time) {
 
 // This runs once the page is ready to be loaded.
 $(document).ready(function() {
-  time = "week";
+  var time = "week";
   updateData(time);
-  setInterval(updateData, 5000);
+  setInterval(function() {
+    updateData(time);
+  }, 5000);
 
   updateClock();
   setInterval(updateClock, 1000);
@@ -133,3 +135,4 @@ $(document).ready(function() {
     time = updateTimePeriod(time);
   }, 15000);
 });
+
