@@ -6,7 +6,11 @@ var ENDPOINTS = {
     'hour': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICAr8iACgw&format=json'
   },
   'articles': {
-    'hour': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICA7a2SCgw&format=json'
+    'hour': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICA7a2SCgw&format=json',
+    
+    'day': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICA7bGDCQw&format=json',
+    
+    'week': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICA7bGDCQw&format=json'
   },
   'currentUsers': {
     'realTime': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICA67iPCgw&format=json'
@@ -34,7 +38,7 @@ function updateUsers(time) {
   $(function() {
     $.ajax({
       type: 'GET',
-      url: ENDPOINTS.users.hour,
+      url: ENDPOINTS.users[time],
       dataType: 'jsonp',
       success: function(data) {
         var hour = new Date().getHours();
@@ -62,21 +66,21 @@ function updateCurrentUsers(time) {
  */
 function updateArticles(time) {
 
-  $.ajax({
-    type: 'GET',
-    url: ENDPOINTS.articles.hour,
-    dataType: 'jsonp',
-    success: function(data) {
-      renderHTML(data.rows);
-    }
-  });
-
+    $.ajax({
+      type: 'GET',
+      url: ENDPOINTS.articles[time],
+      dataType: 'jsonp',
+      success: function(data) {
+        renderHTML(data.rows);
+      }
+    });
+  
   function renderHTML(data) {
     var date = new Date();
     var day = date.getDay();
     var hour = date.getHours();
     var minute = date.getMinutes();
-    switch("hour") {
+    switch(time) {
 
       // Uses the past day Json file and filters top articles from past 60 minutes.
       case "hour":
