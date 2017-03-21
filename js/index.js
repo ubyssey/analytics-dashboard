@@ -168,7 +168,6 @@ function updateData() {
 
 // This runs once the page is ready to be loaded.
 $(document).ready(function() {
-  var time = "week";
   updateData();
   setInterval(updateData, 5000);
 
