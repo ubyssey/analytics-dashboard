@@ -87,7 +87,7 @@ function updateArticles(time) {
       }
       counter++;
     }
-
+    
   }
 }
 
