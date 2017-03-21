@@ -14,7 +14,7 @@ var ENDPOINTS = {
 };
 
 // Make an HTTP call to the endpoint and update the pageviews element with the new number
-function updatePageviews() {
+function updatePageviews(time) {
   $.ajax({
     type: 'GET',
     url: ENDPOINTS.pageviews.hour,
@@ -27,7 +27,7 @@ function updatePageviews() {
   });
 }
 
-function updateUsers() {
+function updateUsers(time) {
 
   var $usersite = $('#user-visits > p');
 
@@ -35,7 +35,7 @@ function updateUsers() {
     $.ajax({
       type: 'GET',
       url: ENDPOINTS.users.hour,
-	    dataType: 'jsonp',
+      dataType: 'jsonp',
       success: function(data) {
         var hour = new Date().getHours();
         $('#user-visits > p').html(data.rows[hour][1]);
@@ -45,7 +45,7 @@ function updateUsers() {
 }
 
 function updateCurrentUsers() {
-    $.ajax({
+  $.ajax({
     type: 'GET',
     url: ENDPOINTS.currentUsers.realTime,
     dataType: 'jsonp',
@@ -57,7 +57,7 @@ function updateCurrentUsers() {
   });
 }
 
-function updateArticles() {
+function updateArticles(time) {
 
   $.ajax({
     type: 'GET',
@@ -102,18 +102,34 @@ function updateClock() {
   $('#time > span').html(curTime);
 }
 
-function updateData() {
-  updateUsers();
-  updatePageviews()
-  updateArticles();
+function updateData(time) {
+  updateUsers(time);
+  updatePageviews(time);
+  updateArticles(time);
   updateCurrentUsers();
+}
+
+function updateTimePeriod(time) {
+  switch(time) {
+    case "hour":
+      return "day";
+    case "day":
+      return "week";
+    default:
+      return "hour";
+  }
 }
 
 // This runs once the page is ready to be loaded.
 $(document).ready(function() {
-  updateData();
+  time = "week";
+  updateData(time);
   setInterval(updateData, 5000);
 
   updateClock();
   setInterval(updateClock, 1000);
+
+  setInterval(function() {
+    time = updateTimePeriod(time);
+  }, 15000);
 });
