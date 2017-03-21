@@ -38,7 +38,7 @@ function updateUsers(time) {
   $(function() {
     $.ajax({
       type: 'GET',
-      url: ENDPOINTS.users[time],
+      url: ENDPOINTS.users.hour,
       dataType: 'jsonp',
       success: function(data) {
         var hour = new Date().getHours();
