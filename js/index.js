@@ -65,15 +65,14 @@ function updateCurrentUsers(time) {
  * Sums the views of those articles, then sorts by view count, then updates the HTML. 
  */
 function updateArticles(time) {
-
-    $.ajax({
-      type: 'GET',
-      url: ENDPOINTS.articles[time],
-      dataType: 'jsonp',
-      success: function(data) {
-        renderHTML(data.rows, time);
-      }
-    });
+  $.ajax({
+    type: 'GET',
+    url: ENDPOINTS.articles[time],
+    dataType: 'jsonp',
+    success: function(data) {
+      renderHTML(data.rows, time);
+    }
+  });
   
   function renderHTML(data, time) {
     var date = new Date();
