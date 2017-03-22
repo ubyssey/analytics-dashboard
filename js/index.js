@@ -81,7 +81,7 @@ function updateArticles(time) {
     var minute = date.getMinutes();
 
     switch(time) {
-        // Uses the past day Json file and filters top articles from past 60 minutes.
+      // Uses the past day Json file and filters top articles from past 60 minutes.
       case "hour":
         var filtered = data.filter(function (a) {
           var articleHour = Number(a[2]);
@@ -90,7 +90,7 @@ function updateArticles(time) {
         });
         break;
 
-        // Uses the past 7 days Json file and filters top articles from past 24 hours.
+      // Uses the past 7 days Json file and filters top articles from past 24 hours.
       case "day":
 
         var filtered = data.filter(function (a) {
@@ -100,7 +100,7 @@ function updateArticles(time) {
         });   
         break;
 
-        // Displays past 7 day's top articles. Does not need to be filtered.
+      // Displays past 7 day's top articles. Does not need to be filtered.
       default:
         var filtered = data;
 
