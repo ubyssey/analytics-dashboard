@@ -3,7 +3,12 @@ var ENDPOINTS = {
     'hour': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICAgICACgw&format=json'
   },
   'pageviews': {
-    'hour': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICAr8iACgw&format=json'
+    'hour': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICAr8iACgw&format=json',
+
+      'day': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICA3uqJCgw&format=json',
+
+      'week': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICAgOSRCgw&format=json'
+
   },
   'articles': {
     'hour': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICA7a2SCgw&format=json',
@@ -18,17 +23,52 @@ var ENDPOINTS = {
 };
 
 // Make an HTTP call to the endpoint and update the pageviews element with the new number
+
+function updateStatTime(time) {
+  $('#stats > p').html("Past " + time);
+}
+
 function updatePageviews(time) {
   $.ajax({
     type: 'GET',
-    url: ENDPOINTS.pageviews.hour,
+    url: ENDPOINTS.pageviews[time],
     dataType: 'jsonp',
     success: function(data) {
-      var hour = new Date().getHours();
-      var pageviews = data.rows[hour][1];
-      $('#page-views > p').html(pageviews);
+        renderHTML(data, time);
     }
   });
+
+  function renderHTML(data, time) {
+      var date = new Date();
+      var day = date.getDay();
+      var hour = date.getHours();
+      var pageviews = 0;
+
+      switch(time) {
+
+          // Displays past hour page views
+          case "hour":
+              pageviews = data.rows[hour][1];
+              $('#page-views > p').html(pageviews);
+              break;
+
+          // Displays past day page views
+          case "day":
+              pageviews = data.rows[day][1];
+              $('#page-views > p').html(pageviews);
+              break;
+
+          // Displays past 7 day's page views
+          default:
+              for (var i = 0; i < 7; i++) {
+              pageviews += Number(data.rows[i][1]);
+          }
+              $('#page-views > p').html(pageviews.toString());
+
+      }
+  }
+
+
 }
 
 function updateUsers(time) {
@@ -38,7 +78,7 @@ function updateUsers(time) {
   $(function() {
     $.ajax({
       type: 'GET',
-      url: ENDPOINTS.users[time],
+      url: ENDPOINTS.users.hour,
       dataType: 'jsonp',
       success: function(data) {
         var hour = new Date().getHours();
@@ -166,6 +206,7 @@ function updateData(time) {
   updateUsers(time);
   updatePageviews(time);
   updateArticles(time);
+  updateStatTime(time);
   updateCurrentUsers();
 }
 
