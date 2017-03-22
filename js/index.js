@@ -155,10 +155,10 @@ function updateStatsTimeRangeDisplay(time) {
     case "hour":
       $('#stats-time-range').html("Past 60 Minutes");
       break;
-      case "day":
+    case "day":
       $('#stats-time-range').html("Past 24 Hours");
       break;
-      default:
+    default:
       $('#stats-time-range').html("Past 7 Days");
       break;
 
