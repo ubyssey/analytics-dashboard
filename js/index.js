@@ -6,7 +6,11 @@ var ENDPOINTS = {
     'hour': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICAr8iACgw&format=json'
   },
   'articles': {
-    'hour': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICA7a2SCgw&format=json'
+    'hour': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICA7a2SCgw&format=json',
+    
+    'day': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICA7bGDCQw&format=json',
+    
+    'week': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICA7bGDCQw&format=json'
   },
   'currentUsers': {
     'realTime': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICA67iPCgw&format=json'
@@ -61,23 +65,22 @@ function updateCurrentUsers(time) {
  * Sums the views of those articles, then sorts by view count, then updates the HTML. 
  */
 function updateArticles(time) {
-
   $.ajax({
     type: 'GET',
-    url: ENDPOINTS.articles.hour,
+    url: ENDPOINTS.articles[time],
     dataType: 'jsonp',
     success: function(data) {
-      renderHTML(data.rows);
+      renderHTML(data.rows, time);
     }
   });
-
-  function renderHTML(data) {
+  
+  function renderHTML(data, time) {
     var date = new Date();
     var day = date.getDay();
     var hour = date.getHours();
     var minute = date.getMinutes();
-    switch("hour") {
 
+    switch(time) {
       // Uses the past day Json file and filters top articles from past 60 minutes.
       case "hour":
         var filtered = data.filter(function (a) {
