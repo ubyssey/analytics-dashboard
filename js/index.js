@@ -7,9 +7,9 @@ var ENDPOINTS = {
   },
   'articles': {
     'hour': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICA7a2SCgw&format=json',
-    
+
     'day': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICA7bGDCQw&format=json',
-    
+
     'week': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICA7bGDCQw&format=json'
   },
   'currentUsers': {
@@ -73,7 +73,7 @@ function updateArticles(time) {
       renderHTML(data.rows, time);
     }
   });
-  
+
   function renderHTML(data, time) {
     var date = new Date();
     var day = date.getDay();
@@ -150,6 +150,21 @@ function updateArticles(time) {
   }
 }
 
+function updateStatsTimeRangeDisplay(time) {
+  switch(time) {
+    case "hour":
+      $('#stats-time-range').html("Past 60 Minutes");
+      break;
+    case "day":
+      $('#stats-time-range').html("Past 24 Hours");
+      break;
+    default:
+      $('#stats-time-range').html("Past 7 Days");
+      break;
+
+  }
+}
+
 
 function updateClock() {
   var curTime = new Date();
@@ -166,6 +181,7 @@ function updateData(time) {
   updatePageviews(time);
   updateArticles(time);
   updateCurrentUsers();
+  updateStatsTimeRangeDisplay(time);
 }
 
 function updateTimePeriod(time) {
