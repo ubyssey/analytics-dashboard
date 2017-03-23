@@ -6,7 +6,11 @@ var ENDPOINTS = {
     'hour': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICAr8iACgw&format=json'
   },
   'articles': {
-    'hour': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICA7a2SCgw&format=json'
+    'hour': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICA7a2SCgw&format=json',
+
+    'day': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICA7bGDCQw&format=json',
+
+    'week': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICA7bGDCQw&format=json'
   },
   'currentUsers': {
     'realTime': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICA67iPCgw&format=json'
@@ -44,7 +48,7 @@ function updateUsers(time) {
   });
 }
 
-function updateCurrentUsers() {
+function updateCurrentUsers(time) {
   $.ajax({
     type: 'GET',
     url: ENDPOINTS.currentUsers.realTime,
@@ -57,37 +61,108 @@ function updateCurrentUsers() {
   });
 }
 
+/* Filters the articles to grab the appropriate ones for the alloted time slot.
+ * Sums the views of those articles, then sorts by view count, then updates the HTML. 
+ */
 function updateArticles(time) {
-
   $.ajax({
     type: 'GET',
-    url: ENDPOINTS.articles.hour,
+    url: ENDPOINTS.articles[time],
     dataType: 'jsonp',
     success: function(data) {
-      renderHTML(data.rows);
+      renderHTML(data.rows, time);
     }
   });
 
-  function renderHTML(data) {
+  function renderHTML(data, time) {
     var date = new Date();
+    var day = date.getDay();
     var hour = date.getHours();
-    var title, views;
+    var minute = date.getMinutes();
 
-    var i = 1;
-    var counter = 0;
+    switch(time) {
+      // Uses the past day Json file and filters top articles from past 60 minutes.
+      case "hour":
+        var filtered = data.filter(function (a) {
+          var articleHour = Number(a[2]);
+          var articleMinute = Number(a[3]);
+          return (articleHour === hour-1 && articleMinute >= minute || articleHour === hour);
+        });
+        break;
 
-    while (i < 6 && counter < data.length) {
-      title = data[counter][0];
-      views = data[counter][3];
-      article_hour = parseInt(data[counter][2]);
-      if (article_hour == hour) {
+      // Uses the past 7 days Json file and filters top articles from past 24 hours.
+      case "day":
+
+        var filtered = data.filter(function (a) {
+          var articleHour = Number(a[2]);
+          var articleDay = Number(a[3]);
+          return (articleDay === day-1 && articleHour >= hour || articleDay === day);
+        });   
+        break;
+
+      // Displays past 7 day's top articles. Does not need to be filtered.
+      default:
+        var filtered = data;
+
+    }
+
+    // Adds the views together.
+    var toPrint = sumOfFiltered(filtered);
+
+    toPrint.sort((function(a,b) {
+      return b[4] - a[4];
+    }));
+    update(toPrint);
+
+
+    // Adds the views and returns to toPrint.
+    function sumOfFiltered(filtered) {
+      var i, j;
+      toPrint = [];
+      for (i = 0; i < filtered.length; i++) {
+        var bool = false;
+        var title = filtered[i][1];
+        for(j = 0; j < toPrint.length; j++) {
+          if (toPrint[j][1] === title) {
+            bool = true;
+            break;
+          }
+        }
+        if (bool) {
+          var n = parseInt(toPrint[j][4]) + parseInt(filtered[i][4]);
+          toPrint[j][4] = n.toString();
+        } else {
+          toPrint.push(filtered[i]);
+        }
+      }
+      return toPrint;
+    }
+
+    // Updates the HTML.
+    function update(toPrint) {
+      for (var i = 1; i <= 5; i++) {
+        title = toPrint[i-1][1];
+        views = toPrint[i-1][4];
         $("#article-title-"+ i).html(i + ". " + title);
         $("#article-view-" + i).html(views + "  <i class=\"fa fa-eye\" aria-hidden=\"true\"></i>");
-        i++;
       }
-      counter++;
     }
-    
+  }
+}
+
+function updateStatsTimeRangeDisplay(time) {
+  switch(time) {
+    case "hour":
+      $('#stats-time-range').html("Past 60 Minutes");
+      break;
+    case "day":
+      $('#stats-time-range').html("Past 24 Hours");
+      break;
+    default:
+      $('#stats-time-range').html("Past 7 Days");
+      break;
+
+
   }
 }
 
@@ -107,6 +182,7 @@ function updateData(time) {
   updatePageviews(time);
   updateArticles(time);
   updateCurrentUsers();
+  updateStatsTimeRangeDisplay(time);
 }
 
 function updateTimePeriod(time) {
@@ -122,9 +198,11 @@ function updateTimePeriod(time) {
 
 // This runs once the page is ready to be loaded.
 $(document).ready(function() {
-  time = "week";
+  var time = "week";
   updateData(time);
-  setInterval(updateData, 5000);
+  setInterval(function() {
+    updateData(time);
+  }, 5000);
 
   updateClock();
   setInterval(updateClock, 1000);
@@ -133,3 +211,4 @@ $(document).ready(function() {
     time = updateTimePeriod(time);
   }, 15000);
 });
+
