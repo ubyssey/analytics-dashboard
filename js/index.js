@@ -3,7 +3,11 @@ var ENDPOINTS = {
     'hour': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICAgICACgw&format=json'
   },
   'pageviews': {
-    'hour': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICAr8iACgw&format=json'
+    'hour': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICAr8iACgw&format=json',
+
+      'day': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICAgOSRCgw&format=json',
+
+      'week': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICAgOSRCgw&format=json'
   },
   'articles': {
     'hour': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICA7a2SCgw&format=json',
@@ -21,31 +25,75 @@ var ENDPOINTS = {
 function updatePageviews(time) {
   $.ajax({
     type: 'GET',
-    url: ENDPOINTS.pageviews.hour,
+    url: ENDPOINTS.pageviews[time],
     dataType: 'jsonp',
     success: function(data) {
-      var hour = new Date().getHours();
-      var pageviews = data.rows[hour][1];
-      $('#page-views > p').html(pageviews);
+      renderHTML(data, time);
     }
   });
+
+  function renderHTML(data, time) {
+      var hour = new Date().getHours();
+      var day = new Date().getDay();
+      switch(time) {
+          // Page views in the past 60 minutes
+          case "hour":
+              $('#page-views > p').html(data.rows[hour][1]);
+              break;
+
+          // Page views in the past 24 hours
+          case "day":
+              $('#page-views > p').html(data.rows[day][1]);
+              break;
+
+          // Page views in the past 7 days
+          default:
+            var pageSum = 0;
+            for(var i = 0; i < 7; i++) {
+              pageSum += Number(data.rows[i][1]);
+            }
+              $('#page-views > p').html(pageSum.toString());
+
+      }
+  }
+
 }
 
 function updateUsers(time) {
-
-  var $usersite = $('#user-visits > p');
-
-  $(function() {
     $.ajax({
-      type: 'GET',
-      url: ENDPOINTS.users.hour,
-      dataType: 'jsonp',
-      success: function(data) {
-        var hour = new Date().getHours();
-        $('#user-visits > p').html(data.rows[hour][1]);
-      }
+        type: 'GET',
+        url: ENDPOINTS.users[time],
+        dataType: 'jsonp',
+        success: function(data) {
+            renderHTML(data, time);
+        }
     });
-  });
+
+    function renderHTML(data, time) {
+        var hour = new Date().getHours();
+        var day = new Date().getDay();
+        switch(time) {
+            // Page views in the past 60 minutes
+            case "hour":
+                $('#user-visits > p').html(data.rows[hour][1]);
+                break;
+
+            // Page views in the past 24 hours
+            case "day":
+                $('#user-visits > p').html(data.rows[day][1]);
+                break;
+
+            // Page views in the past 7 days
+            default:
+                var userSum = 0;
+                for(var i = 0; i < 7; i++) {
+                    userSum += Number(data.rows[i][1]);
+                }
+                $('#user-visits > p').html(userSum.toString());
+
+        }
+    }
+
 }
 
 function updateCurrentUsers(time) {
