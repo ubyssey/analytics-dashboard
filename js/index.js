@@ -73,17 +73,17 @@ function updateUsers(time) {
         var hour = new Date().getHours();
         var day = new Date().getDay();
         switch(time) {
-            // Page views in the past 60 minutes
+            // User visits in the past 60 minutes
             case "hour":
                 $('#user-visits > p').html(data.rows[hour][1]);
                 break;
 
-            // Page views in the past 24 hours
+            // User visits in the past 24 hours
             case "day":
                 $('#user-visits > p').html(data.rows[day][1]);
                 break;
 
-            // Page views in the past 7 days
+            // User visits in the past 7 days
             default:
                 var userSum = 0;
                 for(var i = 0; i < 7; i++) {
@@ -186,6 +186,12 @@ function updateArticles(time) {
       return toPrint;
     }
 
+
+
+
+
+
+
     // Updates the HTML.
     function update(toPrint) {
       for (var i = 1; i <= 5; i++) {
@@ -243,6 +249,7 @@ function updateTimePeriod(time) {
       return "hour";
   }
 }
+
 
 // This runs once the page is ready to be loaded.
 $(document).ready(function() {
