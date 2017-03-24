@@ -202,7 +202,7 @@ $(document).ready(function() {
   updateData(time);
   setInterval(function() {
     updateData(time);
-  }, 5000);
+  }, 15000);
 
   updateClock();
   setInterval(updateClock, 1000);
