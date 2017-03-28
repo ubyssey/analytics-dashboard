@@ -172,7 +172,7 @@ function updateArticles(time) {
         title = toPrint[i-1][1];
         views = toPrint[i-1][4];
         $("#article-title-"+ i).html(i + ". " + title);
-        $("#article-view-" + i).html(views + "  <i class=\"fa fa-eye\" aria-hidden=\"true\"></i>");
+        $("#article-view-" + i).html(views + " views");
       }
     }
   }
