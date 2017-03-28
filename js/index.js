@@ -5,7 +5,7 @@ var ENDPOINTS = {
   'pageviews': {
     'hour': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICAr8iACgw&format=json',
     
-    'day': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICA3uqJCgw&format=json',
+    'day': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICAgOSRCgw&format=json',
     
     'week': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICAgOSRCgw&format=json'
   },
@@ -21,14 +21,16 @@ var ENDPOINTS = {
   }
 };
 
-// Make an HTTP call to the endpoint and update the pageviews element with the new number
+/* Make an HTTP call to the endpoint and update the pageviews element with the new number.
+ * Filters the proxy to grab appropriate time frames, then sums up the values.
+ */
 function updatePageviews(time) {
   $.ajax({
     type: 'GET',
-    url: ENDPOINTS.pageviews[time],
+    url: ENDPOINTS.pageviews['day'],
     dataType: 'jsonp',
     success: function(data) {
-      renderHTML(data, time);
+      renderHTML(data.rows, time);
     }
   });
 
@@ -36,28 +38,49 @@ function updatePageviews(time) {
     var date = new Date();
     var day = date.getDay();
     var hour = date.getHours();
-    var pageviews = 0;
+    var minute = date.getMinutes();
 
-    switch(time) {
-
+    switch("day") {
+        // Uses the past day Json file and filters pageviews from past 60 minutes.
       case "hour":
-        pageviews = data.rows[hour][1];
-        $('#page-views > p').html(pageviews);
+        var filtered = data.filter(function (a) {
+          var viewHour = Number(a[0]);
+          var viewMinute = Number(a[1]);
+          return (viewHour === hour-1 && viewMinute >= minute || viewHour === hour);
+        });
         break;
 
       case "day":
-        pageviews = data.rows[day][1];
-        $('#page-views > p').html(pageviews);
+        var filtered = data.filter(function (a) {
+          var viewHour = Number(a[0]);
+          var viewDay = Number(a[1]);
+          return (viewDay === day-1 && viewHour >= hour || viewDay === day);
+        });   
         break;
 
       default:
         for (var i = 0; i < 7; i++) {
           pageviews += Number(data.rows[i][1]);
         }
-        $('#page-views > p').html(pageviews.toString());
+        $('#page-views > p').html(pageviews.toString());   
+    }
+    // Adds the views together.
+    console.log(filtered);
+    var toPrint = sumOfFiltered(filtered);
+    $('#page-views > p').html(toPrint.toString());
+
+    
+    function sumOfFiltered(filtered) {
+      var i;
+      var j = 0;
+      for (i = 0; i < filtered.length; i++) {
+        j += Number(filtered[i][2]);
+      }
+      return j;
     }
   }
 }
+
 
 function updateUsers(time) {
 
@@ -76,7 +99,7 @@ function updateUsers(time) {
   });
 }
 
-function updateCurrentUsers(time) {
+function updateCurrentUsers() {
   $.ajax({
     type: 'GET',
     url: ENDPOINTS.currentUsers.realTime,
@@ -172,7 +195,7 @@ function updateArticles(time) {
         title = toPrint[i-1][1];
         views = toPrint[i-1][4];
         $("#article-title-"+ i).html(i + ". " + title);
-        $("#article-view-" + i).html(views + "  <i class=\"fa fa-eye\" aria-hidden=\"true\"></i>");
+        $("#article-view-" + i).html(views + " views");
       }
     }
   }
