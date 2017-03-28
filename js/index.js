@@ -27,7 +27,7 @@ var ENDPOINTS = {
 function updatePageviews(time) {
   $.ajax({
     type: 'GET',
-    url: ENDPOINTS.pageviews['day'],
+    url: ENDPOINTS.pageviews[time],
     dataType: 'jsonp',
     success: function(data) {
       renderHTML(data.rows, time);
@@ -37,10 +37,11 @@ function updatePageviews(time) {
   function renderHTML(data, time) {
     var date = new Date();
     var day = date.getDay();
+    var dayOfMonth = date.getDate();
     var hour = date.getHours();
     var minute = date.getMinutes();
 
-    switch("day") {
+    switch(time) {
         // Uses the past day Json file and filters pageviews from past 60 minutes.
       case "hour":
         var filtered = data.filter(function (a) {
@@ -53,28 +54,35 @@ function updatePageviews(time) {
       case "day":
         var filtered = data.filter(function (a) {
           var viewHour = Number(a[0]);
-          var viewDay = Number(a[1]);
-          return (viewDay === day-1 && viewHour >= hour || viewDay === day);
+          var viewDate = Number(a[2]);
+          return (viewDate === dayOfMonth-1 && viewHour >= hour || viewDate === date);
         });   
         break;
 
       default:
-        for (var i = 0; i < 7; i++) {
-          pageviews += Number(data.rows[i][1]);
-        }
-        $('#page-views > p').html(pageviews.toString());   
+        var filtered = data;   
     }
-    // Adds the views together.
-    console.log(filtered);
-    var toPrint = sumOfFiltered(filtered);
+    
+    var toPrint = sumOfFiltered(filtered, time);
     $('#page-views > p').html(toPrint.toString());
 
     
-    function sumOfFiltered(filtered) {
+    function sumOfFiltered(filtered, time) {
       var i;
       var j = 0;
+      var viewColumn;
+      
+      switch (time) {
+        case "hour":
+          viewColumn = 2;
+          break;
+        default:
+          viewColumn = 3;
+          break;
+      }
+      
       for (i = 0; i < filtered.length; i++) {
-        j += Number(filtered[i][2]);
+        j += Number(filtered[i][viewColumn]);
       }
       return j;
     }
