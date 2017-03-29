@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style> /* set the CSS */
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 2px;
+}
+</style>
+<body>
+
+<!-- load the d3.js library -->    	
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script>
+// set the dimensions and margins of the graph
+var margin = {top: 20, right: 20, bottom: 30, left: 50},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+
+d3.json("pageview.json", function(error, data) {
+    if (error) throw error;
+    // format the data
+    // p1-p6 are the points to plot
+    var date = new Date();
+    var hour = Number(date.getHours());
+    var minute = Number(date.getMinutes());
+    var p1, p2, p3, p4, p5, p6;
+    p1 = getPoint(0, 10);
+    p2 = getPoint(10, 20);
+    p3 = getPoint(20, 30);
+    p4 = getPoint(30, 40);
+    p5 = getPoint(40, 50);
+    p6 = getPoint(50, 60);
+
+
+    function getPoint(low, hi) {
+        var sum = 0;
+        for(var i = 0; i < data.rows.length; i++) {
+            if(Number(data.rows[i][0]) === 11 && Number(data.rows[i][1]) >= low && Number(data.rows[i][1] < hi)) {
+                sum += Number(data.rows[i][2]);
+            }
+        }
+        return sum;
+    }
+
+    console.log(hour);
+    console.log(data.rows[0][2]);
+    console.log(Number(data.rows[0][1]));
+    console.log(p1);
+    console.log(p2);
+    console.log(p3);
+    console.log(p4);
+    console.log(p5);
+    console.log(p6);
+
+
+
+
+
+});
+</script>
+</body>
