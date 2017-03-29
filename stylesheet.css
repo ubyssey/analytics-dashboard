@@ -45,7 +45,7 @@ p {
     flex:1;
     margin: auto;
     padding-left: 3%;
-    font-size:1.5em;
+    font-size:3em;
     color: #FFFFFF;
 }
 
@@ -53,7 +53,7 @@ p {
     flex:2;
     text-align: center;
     margin: auto;
-    font-size:3em;
+    font-size:3.5em;
     color: #FFFFFF;
 }
 
@@ -62,7 +62,7 @@ p {
     margin: auto;
     padding-right: 3%;
     text-align: right;
-    font-size: 1.5em;
+    font-size: 3em;
     color: #FFFFFF;
 }
 
@@ -81,15 +81,31 @@ p {
     display:flex;
     flex-direction:column;
     justify-content: space-between;
-    border:solid;
-    border-width: 5px;
     border-color: #003333;
     margin-right: 20px;
+    
 }
 
 .left-half-top{
     flex:2;
+    border:solid;
+    border-width: 5px;
+    border-color: #003333;
+    margin-bottom: 50px;
+    display: flex;
+    flex-direction: column;
 }
+
+.left-half-top-header{
+    flex:1;
+    background-color: #003333;
+}
+
+.left-half-top-chart{
+    flex:6;
+}
+
+
 .left-half-bottom{
     display:flex;
     flex-direction:column;
@@ -111,6 +127,21 @@ p {
     margin-left: 80px;
 }
 
+#Stats1{
+    font-size: 1.5em;
+    color:gray;
+}
+
+#Stats2{
+    font-size: 1.5em;
+    color:gray;
+}
+
+#Stats3{
+    font-size: 1.5em;
+    color:gray;
+}
+
 .left-half div {
     justify-content: space-around;
 }
@@ -118,7 +149,7 @@ p {
 #stats-time-range {
     color: #246e62;
     margin-left: 17px;
-    margin-top: 20px;
+    margin-top: 30px;
 }
 
 .right-half{
@@ -133,33 +164,37 @@ p {
 }
 
 .Stories-Header{
-    flex:0.25;
+    flex:0.19;
     border:solid;
     border-color: #003333;
     background-color: #003333;
     font-weight: 50;
 }
 
-#Story-Header{
+.Story-Header{
     color: #246e62;
-    margin-top: 30px;
-    margin-left: 30px;
+    margin-top: 25px;
+    margin-left: 25px;
 }
 
 .articles {
     margin-top: 2em;
     flex:2;
+    display:flex;
+    flex-direction: column;
 }
 
 .article {
     display:flex;
-    font-size: 2.9em;
+    font-size: 2.7em;
     margin-bottom: 0.8em;
+    flex:1;
 }
 
 .title {
     flex:1;
     font-family: crimson-text;
+    margin-left: 10px;
 }
 
 .view {
@@ -168,10 +203,13 @@ p {
 
 #current-users{
     flex:1;
+    font-size: 1.5em;
 }
 #user-visits{
     flex:1;
+    font-size: 1.5em;
 }
 #page-views{
     flex:1;
+    font-size: 1.5em;
 }

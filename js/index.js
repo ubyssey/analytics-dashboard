@@ -171,7 +171,7 @@ function updateArticles(time) {
       for (var i = 1; i <= 5; i++) {
         title = toPrint[i-1][1];
         views = toPrint[i-1][4];
-        $("#article-title-"+ i).html(i + ". " + title);
+        $("#article-title-"+ i).html(i + " " + title);
         $("#article-view-" + i).html(views + " views");
       }
     }
@@ -181,13 +181,13 @@ function updateArticles(time) {
 function updateStatsTimeRangeDisplay(time) {
   switch(time) {
     case "hour":
-      $('#stats-time-range').html("Past 60 Minutes");
+      $('#stats-time-range').html("Statistics From The Past 60 Minutes");
       break;
     case "day":
-      $('#stats-time-range').html("Past 24 Hours");
+      $('#stats-time-range').html("Statistics From The Past 24 Hours");
       break;
     default:
-      $('#stats-time-range').html("Past 7 Days");
+      $('#stats-time-range').html("Statistics From The Past 7 Days");
       break;
 
 
