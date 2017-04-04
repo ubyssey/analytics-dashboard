@@ -1,12 +1,12 @@
 var ENDPOINTS = {
   'users': {
-    'hour': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICAgICACgw&format=json'
+    'hour': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICA67iPCgw'
   },
   'pageviews': {
     'hour': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICAr8iACgw&format=json',
-    
+
     'day': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICAr8iACgw&format=json',
-    
+
     'week': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICAgOSRCgw&format=json'
   },
   'articles': {
@@ -50,23 +50,23 @@ function updatePageviews(time) {
           return (viewHour === hour-1 && viewMinute >= minute || viewHour === hour);
         });
         break;
-        
+
         // Day uses the past 24 hours Json file.
         // Week uses the past week Json file. No filter required.
       default:
         var filtered = data;   
     }
-    
+
     // Adds the page views together.
     var toPrint = sumOfFiltered(filtered, time);
     $('#page-views > p').html(toPrint.toString());
 
-    
+
     function sumOfFiltered(filtered, time) {
       var i;
       var j = 0;
       var viewColumn;
-      
+
       // API columns are organized differently. This selects the pageviews column.
       switch (time) {
         case "week":
@@ -76,7 +76,7 @@ function updatePageviews(time) {
           viewColumn = 2;
           break;
       }
-      
+
       for (i = 0; i < filtered.length; i++) {
         j += Number(filtered[i][viewColumn]);
       }
@@ -85,22 +85,57 @@ function updatePageviews(time) {
   }
 }
 
-
+/* Make an HTTP call to the endpoint and update the users element with the new number.
+ * Filters the proxy to grab appropriate time frames, then sums up the values.
+ */
 function updateUsers(time) {
-
-  var $usersite = $('#user-visits > p');
-
-  $(function() {
-    $.ajax({
-      type: 'GET',
-      url: ENDPOINTS.users.hour,
-      dataType: 'jsonp',
-      success: function(data) {
-        var hour = new Date().getHours();
-        $('#user-visits > p').html(data.rows[hour][1]);
-      }
-    });
+  $.ajax({
+    type: 'GET',
+    url: ENDPOINTS.users['hour'],
+    dataType: 'jsonp',
+    success: function(data) {
+      renderHTML(data.rows, time);
+    }
   });
+  
+  function renderHTML(data, time) {
+    var date = new Date();
+    var day = date.getDay();
+    var dayOfMonth = date.getDate();
+    var hour = date.getHours();
+    var minute = date.getMinutes();
+    
+    switch ("hour") {
+        // Uses the past day Json file and filters pageviews from the last 60 minutes.
+      case "hour":
+        var filtered = data.filter(function (a) {
+          var viewHour = Number(a[1]);
+          var viewMinute = Number(a[2]);
+          return (viewHour === hour-1 && viewMinute >= minute || viewHour === hour);
+        });
+        break;
+    }
+    
+    // Adds the users together.
+    var toPrint = sumOfFiltered(filtered, time);
+    $('#user-visits > p').html(toPrint.toString());
+
+    function sumOfFiltered(filtered, time) {
+      var i;
+      var j = 0;
+      var viewColumn;
+      
+      // API columns are organized differently. This selects the pageviews column.
+      switch (time) {
+        case "hour":
+          viewColumn = 3;
+      }
+      for (i = 0; i < filtered.length; i++) {
+        j += Number(filtered[i][viewColumn]);
+      }
+      return j;
+    }
+  }
 }
 
 function updateCurrentUsers() {
@@ -136,7 +171,7 @@ function updateArticles(time) {
     var minute = date.getMinutes();
 
     switch(time) {
-      // Uses the past day Json file and filters top articles from past 60 minutes.
+        // Uses the past day Json file and filters top articles from past 60 minutes.
       case "hour":
         var filtered = data.filter(function (a) {
           var articleHour = Number(a[2]);
@@ -145,7 +180,7 @@ function updateArticles(time) {
         });
         break;
 
-      // Uses the past 7 days Json file and filters top articles from past 24 hours.
+        // Uses the past 7 days Json file and filters top articles from past 24 hours.
       case "day":
 
         var filtered = data.filter(function (a) {
@@ -155,7 +190,7 @@ function updateArticles(time) {
         });   
         break;
 
-      // Displays past 7 day's top articles. Does not need to be filtered.
+        // Displays past 7 day's top articles. Does not need to be filtered.
       default:
         var filtered = data;
 
