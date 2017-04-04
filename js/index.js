@@ -5,7 +5,7 @@ var ENDPOINTS = {
   'pageviews': {
     'hour': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICAr8iACgw&format=json',
     
-    'day': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICAr8iACgw&format=json',
+    'day': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICAgOSRCgw&format=json',
     
     'week': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICAgOSRCgw&format=json'
   },
@@ -50,9 +50,6 @@ function updatePageviews(time) {
           return (viewHour === hour-1 && viewMinute >= minute || viewHour === hour);
         });
         break;
-        
-        
-        /*
         // Uses the past week Json file and filters pageviews from past 24 hours based on day of the month.
       case "day":
         var filtered = data.filter(function (a) {
@@ -61,12 +58,7 @@ function updatePageviews(time) {
           return (viewDate === dayOfMonth-1 && viewHour >= hour || viewDate === date);
         });   
         break;
-        
-        */
-        
-        
-        // Day uses the past 24 hours Json file.
-        // Week uses the past week Json file. No filter required.
+        // Uses the past week Json file. No filter required.
       default:
         var filtered = data;   
     }
@@ -83,11 +75,11 @@ function updatePageviews(time) {
       
       // API columns are organized differently. This selects the pageviews column.
       switch (time) {
-        case "week":
-          viewColumn = 3;
+        case "hour":
+          viewColumn = 2;
           break;
         default:
-          viewColumn = 2;
+          viewColumn = 3;
           break;
       }
       
