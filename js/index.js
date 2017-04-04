@@ -49,7 +49,21 @@ function updatePageviews(time) {
           var viewMinute = Number(a[1]);
           return (viewHour === hour-1 && viewMinute >= minute || viewHour === hour);
         });
-        break;        
+        break;
+        
+        
+        /*
+        // Uses the past week Json file and filters pageviews from past 24 hours based on day of the month.
+      case "day":
+        var filtered = data.filter(function (a) {
+          var viewHour = Number(a[0]);
+          var viewDate = Number(a[2]);
+          return (viewDate === dayOfMonth-1 && viewHour >= hour || viewDate === date);
+        });   
+        break;
+        
+        */
+        
         
         // Day uses the past 24 hours Json file.
         // Week uses the past week Json file. No filter required.
