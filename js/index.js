@@ -49,7 +49,7 @@ function updatePageviews(time) {
           var viewMinute = Number(a[1]);
           return (viewHour === hour-1 && viewMinute >= minute || viewHour === hour);
         });
-        break;
+        break;        
         
         // Day uses the past 24 hours Json file.
         // Week uses the past week Json file. No filter required.
