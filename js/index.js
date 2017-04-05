@@ -1,6 +1,10 @@
 var ENDPOINTS = {
   'users': {
-    'hour': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICAgICACgw&format=json'
+    'hour': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICA67iPCgw',
+    
+    'day': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICA3uqJCgw&format=json',
+    
+    'week': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICA3uqJCgw&format=json'
   },
   'pageviews': {
     'hour': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICAr8iACgw&format=json',
@@ -92,22 +96,66 @@ function updatePageviews(time) {
 }
 
 
+
+/* Make an HTTP call to the endpoint and update the users element with the new number.
+ * Filters the proxy to grab appropriate time frames, then sums up the values.
+ */
 function updateUsers(time) {
-
-  var $usersite = $('#user-visits > p');
-
-  $(function() {
-    $.ajax({
-      type: 'GET',
-      url: ENDPOINTS.users.hour,
-      dataType: 'jsonp',
-      success: function(data) {
-        var hour = new Date().getHours();
-        $('#user-visits > p').html(data.rows[hour][1]);
-      }
-    });
+  $.ajax({
+    type: 'GET',
+    url: ENDPOINTS.users[time],
+    dataType: 'jsonp',
+    success: function(data) {
+      renderHTML(data.rows, time);
+    }
   });
+  
+  function renderHTML(data, time) {
+    var date = new Date();
+    var day = date.getDay();
+    var dayOfMonth = date.getDate();
+    var hour = date.getHours();
+    var minute = date.getMinutes();
+    
+    switch (time) {
+        // Uses the past day Json file and filters pageviews from the last 60 minutes.
+      case "hour":
+        var filtered = data.filter(function (a) {
+          var viewHour = Number(a[1]);
+          var viewMinute = Number(a[2]);
+          return (viewHour === hour-1 && viewMinute >= minute || viewHour === hour);
+        });
+        break;
+        // Uses the past week Json file and filters users from past 24 hours based on day of the month.
+      case "day":
+        var filtered = data.filter(function (a) {
+          var viewHour = Number(a[2]);
+          var viewDate = Number(a[1]);
+          return (viewDate === dayOfMonth-1 && viewHour >= hour || viewDate === date);
+        })
+        break;
+        // Uses the past week Json file. No filter required.
+      default:
+        var filtered = data;
+    }
+    
+    // Adds the users together.
+    var toPrint = sumOfFiltered(filtered);
+    $('#user-visits > p').html(toPrint.toString());
+
+    function sumOfFiltered(filtered) {
+      var i;
+      var j = 0;
+      var viewColumn;
+      
+      for (i = 0; i < filtered.length; i++) {
+        j += Number(filtered[i][3]);
+      }
+      return j;
+    }
+  }
 }
+
 
 function updateCurrentUsers() {
   $.ajax({
