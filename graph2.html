@@ -18,6 +18,23 @@ var margin = {top: 20, right: 20, bottom: 30, left: 50},
     height = 500 - margin.top - margin.bottom;
 
 
+// parse the date / time
+var parseTime = d3.timeParse("%d-%b-%y");
+
+
+// set the ranges
+var x = d3.scaleTime().range([0, width]);
+var y = d3.scaleLinear().range([height, 0]);
+
+
+// define the line
+var valueline = d3.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.close); });
+
+
+
+
 d3.json("pageview.json", function(error, data) {
     if (error) throw error;
     // format the data
@@ -37,7 +54,7 @@ d3.json("pageview.json", function(error, data) {
     function getPoint(low, hi) {
         var sum = 0;
         for(var i = 0; i < data.rows.length; i++) {
-            if(Number(data.rows[i][0]) === 11 && Number(data.rows[i][1]) >= low && Number(data.rows[i][1] < hi)) {
+            if(Number(data.rows[i][0]) === hour && Number(data.rows[i][1]) >= low && Number(data.rows[i][1] < hi)) {
                 sum += Number(data.rows[i][2]);
             }
         }
