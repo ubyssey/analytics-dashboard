@@ -64,21 +64,29 @@ function filter(data) {
   //this gives you an array of tuples where the first element is the hour and the last element is the # of users
   var result = data.rows.map(
     function(elem) {
-      return [elem[0], elem[2]]
+      return [elem[0], elem[1], elem[2]]
     })
-    
+
   var date = new Date();
   var hour = date.getHours();
+  var minute = date.getMinutes();
   var x = [];
 
-  for(var i = 0; i < result.length; i++) {
-    for (var j = 0; j < result[i].length; j++) {
-      if(result[i][0] == hour) {
-        x.push(Number(result[i][1]));
-      }
+  //Sort array by hour and minute
+  result.sort(function(a, b) {
+    var n = a[0] - b[0];
+    if(n !== 0) {
+      return n;
     }
+    return parseInt(a[1]) - parseInt(b[1]);
+  });
+
+  // Add number of pageviews in the past 60 minutes to an array
+  for(var i = 0; i < result.length; i++) {
+
   }
-  return x;
+
+  return result;
 }
 
 var request = $.ajax({
@@ -94,13 +102,17 @@ function drawGraph(reply){
   console.log('Here is the data from the ajax call')
   console.log(reply)
   console.log('now we can filter it!')
-  var x = filter(reply)
-  console.log(x)
+  var xData = filter(reply)
+  var yData = []
+  console.log(xData)
   console.log('and use it to draw the graph.')
 
+  for (var i = 0; i < xData.length; i++) {
+    yData.push(i*10);
+  }
   var data = [ { label: "Page Views",
-                 x: [0, 10, 20, 30, 40, 50, 60],
-                 y: [132, 254, 166, 189, 200] }, ] ;
+                 x: yData,
+                 y: xData }, ] ;
 
   var xy_chart = d3_xy_chart()
       .width(960)
