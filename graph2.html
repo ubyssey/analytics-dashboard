@@ -81,12 +81,14 @@ function filter(data) {
     return parseInt(a[1]) - parseInt(b[1]);
   });
 
-  // Add number of pageviews in the past 60 minutes to an array
+  // Add number of pageviews in the past hour to an array
   for(var i = 0; i < result.length; i++) {
-
+    if(result[i][0] == hour) {
+      x.push(Number(result[i][2]));
+    }
   }
-
-  return result;
+  // filtered array in past hour
+  return x;
 }
 
 var request = $.ajax({
@@ -102,17 +104,17 @@ function drawGraph(reply){
   console.log('Here is the data from the ajax call')
   console.log(reply)
   console.log('now we can filter it!')
-  var xData = filter(reply)
-  var yData = []
+  var yData = filter(reply)
+  var xData = []
   console.log(xData)
   console.log('and use it to draw the graph.')
 
-  for (var i = 0; i < xData.length; i++) {
-    yData.push(i*10);
+  for (var i = 0; i < yData.length; i++) {
+    xData.push(i);
   }
   var data = [ { label: "Page Views",
-                 x: yData,
-                 y: xData }, ] ;
+                 x: xData,
+                 y: yData }, ] ;
 
   var xy_chart = d3_xy_chart()
       .width(960)
