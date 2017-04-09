@@ -57,22 +57,33 @@ var ENDPOINTS = {
     'realTime': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICA67iPCgw&format=json'
   }
 };
-var xArray;
+
 function filterEndpoint() {
-  $.ajax({
+  let test = $.ajax({
     type: 'GET',
-    url: ENDPOINTS.pageviews[hour],
+    url: ENDPOINTS.pageviews.hour,
     dataType: 'jsonp',
     success: function(data) {
       filter(data);
     }
   });
-  var returnData = 0;
-
+    console.log(test);
+  // Filter out an array with the users in past 60 minutes
   function filter(data) {
     //this gives you an array of tuples where the first element is the hour and the last element is the # of users
-    let result = pagedata.rows.map( function(elem) { return [elem[0], elem[2]]})
-    xArray = result;
+    let result = data.rows.map( function(elem) { return [elem[0], elem[2]]})
+    var date = new Date();
+    var hour = date.getHours();
+    var x = [];
+
+    for(var i = 0; i < result.length; i++) {
+      for (var j = 0; j < result[i].length; j++) {
+        if(result[i][0] == hour) {
+          x.push(Number(result[i][1]));
+        }
+      }
+    }
+    return x;
   }
 }
 
@@ -259,17 +270,15 @@ d3.json("pageview.json", function(error, data) {
         return sum;
     }
 
-    var result = filterEndpoint();
-    console.log(result);
-    console.log(hour);
-    console.log(data.rows[0][2]);
-    console.log(Number(data.rows[0][1]));
-    console.log(p1);
-    console.log(p2);
-    console.log(p3);
-    console.log(p4);
-    console.log(p5);
-    console.log(p6);
+//    console.log(hour);
+//    console.log(data.rows[0][2]);
+//    console.log(Number(data.rows[0][1]));
+//    console.log(p1);
+//    console.log(p2);
+//    console.log(p3);
+//    console.log(p4);
+//    console.log(p5);
+//    console.log(p6);
 
 
 });
@@ -277,6 +286,6 @@ d3.json("pageview.json", function(error, data) {
 
 
 
-
 </script>
+<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
 </body>
