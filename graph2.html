@@ -72,7 +72,7 @@ function filter(data) {
   var minute = date.getMinutes();
   var x = [];
 
-  //Sort array by hour and minute
+  // sort result by hour and minute in ascending order
   result.sort(function(a, b) {
     var n = a[0] - b[0];
     if(n !== 0) {
@@ -81,10 +81,16 @@ function filter(data) {
     return parseInt(a[1]) - parseInt(b[1]);
   });
 
-  // Add number of pageviews in the past hour to an array
+  // push number of pageviews in the past 60 minutes to an array
+  var counter = minute;
   for(var i = 0; i < result.length; i++) {
-    if(result[i][0] == hour) {
+    // reset counter after 60 min mark
+    if(counter == 59) {
+      counter = 0;
+    }
+    if((result[i][0] == (hour-1)) && (result[i][1] >= counter)) {
       x.push(Number(result[i][2]));
+      counter++;
     }
   }
   // filtered array in past hour
@@ -97,7 +103,8 @@ var request = $.ajax({
   dataType: 'jsonp'
 });
 
-//This only triggers if the ajax call was successful, you should probably defined a failure case.
+//This only triggers if the ajax call was successful
+//TODO: Define failure case
 request.success(drawGraph)
 
 function drawGraph(reply){
@@ -109,9 +116,11 @@ function drawGraph(reply){
   console.log(xData)
   console.log('and use it to draw the graph.')
 
+
   for (var i = 0; i < yData.length; i++) {
     xData.push(i);
   }
+
   var data = [ { label: "Page Views",
                  x: xData,
                  y: yData }, ] ;
@@ -119,8 +128,8 @@ function drawGraph(reply){
   var xy_chart = d3_xy_chart()
       .width(960)
       .height(500)
-      .xlabel("X Axis")
-      .ylabel("Y Axis") ;
+      .xlabel("Time")
+      .ylabel("Page Views") ;
   var svg = d3.select("body").append("svg")
       .datum(data)
       .call(xy_chart) ;
@@ -265,44 +274,6 @@ function drawGraph(reply){
 
 
 
-  //Get The data
-  d3.json("pageview.json", function(error, data) {
-      if (error) throw error;
-      // format the data
-      // p1-p6 are the points to plot
-      var date = new Date();
-      var hour = Number(date.getHours());
-      var minute = Number(date.getMinutes());
-      var p1, p2, p3, p4, p5, p6;
-      p1 = parsePageView(0, 10);
-      p2 = parsePageView(10, 20);
-      p3 = parsePageView(20, 30);
-      p4 = parsePageView(30, 40);
-      p5 = parsePageView(40, 50);
-      p6 = parsePageView(50, 60);
-
-
-      // Returns amount of pageviews in past hour
-      function parsePageView(low, hi) {
-          var sum = 0;
-          for(var i = 0; i < data.rows.length; i++) {
-              if(Number(data.rows[i][0]) === hour && Number(data.rows[i][1]) >= low && Number(data.rows[i][1] < hi)) {
-                  sum += Number(data.rows[i][2]);
-              }
-          }
-          return sum;
-      }
-
-  //    console.log(hour);
-  //    console.log(data.rows[0][2]);
-  //    console.log(Number(data.rows[0][1]));
-  //    console.log(p1);
-  //    console.log(p2);
-  //    console.log(p3);
-  //    console.log(p4);
-  //    console.log(p5);
-  //    console.log(p6);
-  });
 }
 
 </script>
