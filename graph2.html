@@ -9,7 +9,6 @@ body {
 .axis path,
 .axis line {
   fill: none;
-  stroke: #000;
   shape-rendering: crispEdges;
 }
 
@@ -26,7 +25,8 @@ body {
 
 .line {
   fill: none;
-  stroke-width: 2.5px;
+  stroke: #003333;
+  stroke-width: 8px;
 }
 
 </style>
@@ -120,6 +120,7 @@ function drawGraph(reply){
   for (var i = 0; i < yData.length; i++) {
     xData.push(i);
   }
+
 
   var data = [ { label: "Page Views",
                  x: xData,
