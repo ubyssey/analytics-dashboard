@@ -4,9 +4,9 @@ var ENDPOINTS = {
   },
   'pageviews': {
     'hour': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICAr8iACgw&format=json',
-    
+
     'day': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICA3uqJCgw&format=json',
-    
+
     'week': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICAgOSRCgw&format=json'
   },
   'articles': {
@@ -90,7 +90,7 @@ function updateCurrentUsers(time) {
 }
 
 /* Filters the articles to grab the appropriate ones for the alloted time slot.
- * Sums the views of those articles, then sorts by view count, then updates the HTML. 
+ * Sums the views of those articles, then sorts by view count, then updates the HTML.
  */
 function updateArticles(time) {
   $.ajax({
@@ -125,7 +125,7 @@ function updateArticles(time) {
           var articleHour = Number(a[2]);
           var articleDay = Number(a[3]);
           return (articleDay === day-1 && articleHour >= hour || articleDay === day);
-        });   
+        });
         break;
 
       // Displays past 7 day's top articles. Does not need to be filtered.
@@ -171,8 +171,8 @@ function updateArticles(time) {
       for (var i = 1; i <= 5; i++) {
         title = toPrint[i-1][1];
         views = toPrint[i-1][4];
-        $("#article-title-"+ i).html(i + " " + title);
-        $("#article-view-" + i).html(views + " views");
+        $("#article-title-"+ i).html(title);
+        $("#article-view-" + i).html(views);
       }
     }
   }
@@ -239,4 +239,3 @@ $(document).ready(function() {
     time = updateTimePeriod(time);
   }, 15000);
 });
-

@@ -1,81 +1,91 @@
 <html>
-    <head>
-        <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Crimson+Text" />
-        <link rel="stylesheet" type="text/css" href="stylesheet.css">
-        <script src="https://use.fontawesome.com/432212f1dd.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
-    </head>
-    <body>
+  <head>
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Crimson+Text" />
+    <link rel="stylesheet" type="text/css" href="stylesheet.css">
+    <script src="https://use.fontawesome.com/432212f1dd.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
+  </head>
+  <body>
 
-        <div class="title-bar box">
-            <div id="date">Tuesday, February 14, 2017</div>
-            <div id="title">Ubyssey Analytics</div>
-            <div id="time"><span>3:04pm</span></div>
+    <div class="container">
+
+      <header>
+        <div id="date">Tuesday, February 14, 2017</div>
+        <div id="title">Ubyssey Analytics</div>
+        <div id="time"><span>3:04pm</span></div>
+      </header>
+
+      <main>
+        <div class="left">
+
+          <div class="box top">
+            <div id="stats-time-range" class="box__header">Statistics From The Past Hour</div>
+            <div class="left-half-top-chart">
+              <!-- <object type="text/html" data="graph2.html" style="overflow:auto; width: 100%; height: 100%;"></object> -->
+            </div>
+          </div>
+
+          <div class="box bottom">
+            <div id="stats-time-range" class="box__header">Statistics From The Past Hour</div>
+            <div class="box__content box__content--no-padding stats">
+              <div class="stats__item" id="current-users">
+                <div>
+                  <p>138</p>
+                  <h3 id="Stats1">current users</h3>
+                </div>
+              </div>
+              <div class="stats__item" id="user-visits">
+                <div>
+                  <p> 138 </p>
+                  <h3 id="Stats2">user visits</h3>
+                </div>
+              </div>
+              <div class="stats__item" id="page-views">
+                <div>
+                  <p>138</p>
+                  <h3 id="Stats3">page views</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
 
-        <div class="container">
-            <div class="left-half">
-                <div class="left-half-top">
-                    <div class="left-half-top-header">
-                    <h3 id="stats-time-range">Statistics From The Past Hour</h3>
-                    </div>
-
-                    <div class="left-half-top-chart">
-                      <object type="text/html" data="graph2.html" width="1000px" height="600px" style="overflow:auto;">
-                      </object>
-                    </div>
-
-                </div>
-                <div class="left-half-bottom">
-                <div class="Header">
-                    <h3 id="stats-time-range">Statistics From The Past Hour</h3>
-                    </div>
-                <div class="Stats-Items">
-                <div id="current-users">
-                    <p>138</p>
-                    <h3 id="Stats1"> Current Users </h3>
-                </div>
-
-                <div id="user-visits">
-                    <p> 138 </p>
-                    <h3 id="Stats2"> User Visits </h3>
-                </div>
-                <div id="page-views">
-                    <p>138</p>
-                    <h3 id="Stats3"> Page Views </h3>
-                </div>
-                </div>
-                </div>
+        <div class="right">
+          <div class="box">
+            <div class="box__header">Top 5 Stories</div>
+            <div class="box__content articles">
+              <div class="article">
+                <div class="number">1</div>
+                <div class="title" id="article-title-1">The quick brown fox jumps over the lazy dog</div>
+                <div class="view" id="article-view-1">888888 </div>
+              </div>
+              <div class="article">
+                <div class="number">2</div>
+                <div class="title" id="article-title-2">The quick brown fox jumps over the lazy</div>
+                <div class="view" id="article-view-2">888888 </div>
+              </div>
+              <div class="article">
+                <div class="number">3</div>
+                <div class="title" id="article-title-3">The quick brown fox jumps over the lazy </div>
+                <div class="view" id="article-view-3">888888 </div>
+              </div>
+              <div class="article">
+                <div class="number">4</div>
+                <div class="title" id="article-title-4">The quick brown fox jumps over the lazy dog</div>
+                <div class="view" id="article-view-4">888888 </div>
+              </div>
+              <div class="article">
+                <div class="number">5</div>
+                <div class="title" id="article-title-5">The quick brown fox jumps over the lazy dog</div>
+                <div class="view" id="article-view-5">888888 </div>
+              </div>
             </div>
-            <div class="right-half">
-                <div class="Stories-Header">
-                    <h2 class="Story-Header">Top 5 Stories</h2>
-                </div>
-                <div class="articles">
-                    <div class="article">
-                        <div class="title" id="article-title-1">1 The quick brown fox jumps over the lazy dog</div>
-                        <div class="view" id="article-view-1">888888 views</div>
-                    </div>
-                    <div class="article">
-                        <div class="title" id="article-title-2">2 The quick brown fox jumps over the lazy</div>
-                        <div class="view" id="article-view-2">888888 views</div>
-                    </div>
-                    <div class="article">
-                        <div class="title" id="article-title-3">3 The quick brown fox jumps over the lazy </div>
-                        <div class="view" id="article-view-3">888888 views</div>
-                    </div>
-                    <div class="article">
-                        <div class="title" id="article-title-4">4 The quick brown fox jumps over the lazy dog</div>
-                        <div class="view" id="article-view-4">888888 views</div>
-                    </div>
-                    <div class="article">
-                        <div class="title" id="article-title-5">5 The quick brown fox jumps over the lazy dog</div>
-                        <div class="view" id="article-view-5">888888 views</div>
-                    </div>
-                </div>
-            </div>
-            </div>
-       <script type="text/javascript" src="js/index.js"></script>
-    </body>
+          </div>
+        </div>
+      </main>
+    </div>
+    <script type="text/javascript" src="js/index.js"></script>
+  </body>
 </html>
