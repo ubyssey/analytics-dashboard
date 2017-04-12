@@ -1,11 +1,15 @@
 var ENDPOINTS = {
   'users': {
-    'hour': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICAgICACgw&format=json'
+    'hour': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICA67iPCgw',
+    
+    'day': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICA3uqJCgw&format=json',
+    
+    'week': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICA3uqJCgw&format=json'
   },
   'pageviews': {
     'hour': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICAr8iACgw&format=json',
     
-    'day': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICA3uqJCgw&format=json',
+    'day': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICAgOSRCgw&format=json',
     
     'week': 'https://ubyssey-analytics.appspot.com/query?id=ahNzfnVieXNzZXktYW5hbHl0aWNzchULEghBcGlRdWVyeRiAgICAgOSRCgw&format=json'
   },
@@ -21,62 +25,139 @@ var ENDPOINTS = {
   }
 };
 
-// Make an HTTP call to the endpoint and update the pageviews element with the new number
+/* Make an HTTP call to the endpoint and update the pageviews element with the new number.
+ * Filters the proxy to grab appropriate time frames, then sums up the values.
+ */
 function updatePageviews(time) {
   $.ajax({
     type: 'GET',
     url: ENDPOINTS.pageviews[time],
     dataType: 'jsonp',
     success: function(data) {
-      renderHTML(data, time);
+      renderHTML(data.rows, time);
     }
   });
 
   function renderHTML(data, time) {
     var date = new Date();
     var day = date.getDay();
+    var dayOfMonth = date.getDate();
     var hour = date.getHours();
-    var pageviews = 0;
+    var minute = date.getMinutes();
 
     switch(time) {
-
+        // Uses the past day Json file and filters pageviews from past 60 minutes.
       case "hour":
-        pageviews = data.rows[hour][1];
-        $('#page-views > p').html(pageviews);
+        var filtered = data.filter(function (a) {
+          var viewHour = Number(a[0]);
+          var viewMinute = Number(a[1]);
+          return (viewHour === hour-1 && viewMinute >= minute || viewHour === hour);
+        });
         break;
-
+        // Uses the past week Json file and filters pageviews from past 24 hours based on day of the month.
       case "day":
-        pageviews = data.rows[day][1];
-        $('#page-views > p').html(pageviews);
+        var filtered = data.filter(function (a) {
+          var viewHour = Number(a[0]);
+          var viewDate = Number(a[2]);
+          return (viewDate === dayOfMonth-1 && viewHour >= hour || viewDate === date);
+        });   
         break;
-
+        // Uses the past week Json file. No filter required.
       default:
-        for (var i = 0; i < 7; i++) {
-          pageviews += Number(data.rows[i][1]);
-        }
-        $('#page-views > p').html(pageviews.toString());
+        var filtered = data;   
+    }
+    
+    // Adds the page views together.
+    var toPrint = sumOfFiltered(filtered, time);
+    $('#page-views > p').html(toPrint.toString());
+
+    
+    function sumOfFiltered(filtered, time) {
+      var i;
+      var j = 0;
+      var viewColumn;
+      
+      // API columns are organized differently. This selects the pageviews column.
+      switch (time) {
+        case "hour":
+          viewColumn = 2;
+          break;
+        default:
+          viewColumn = 3;
+          break;
+      }
+      
+      for (i = 0; i < filtered.length; i++) {
+        j += Number(filtered[i][viewColumn]);
+      }
+      return j;
     }
   }
 }
 
+
+
+/* Make an HTTP call to the endpoint and update the users element with the new number.
+ * Filters the proxy to grab appropriate time frames, then sums up the values.
+ */
 function updateUsers(time) {
-
-  var $usersite = $('#user-visits > p');
-
-  $(function() {
-    $.ajax({
-      type: 'GET',
-      url: ENDPOINTS.users.hour,
-      dataType: 'jsonp',
-      success: function(data) {
-        var hour = new Date().getHours();
-        $('#user-visits > p').html(data.rows[hour][1]);
-      }
-    });
+  $.ajax({
+    type: 'GET',
+    url: ENDPOINTS.users[time],
+    dataType: 'jsonp',
+    success: function(data) {
+      renderHTML(data.rows, time);
+    }
   });
+  
+  function renderHTML(data, time) {
+    var date = new Date();
+    var day = date.getDay();
+    var dayOfMonth = date.getDate();
+    var hour = date.getHours();
+    var minute = date.getMinutes();
+    
+    switch (time) {
+        // Uses the past day Json file and filters pageviews from the last 60 minutes.
+      case "hour":
+        var filtered = data.filter(function (a) {
+          var viewHour = Number(a[1]);
+          var viewMinute = Number(a[2]);
+          return (viewHour === hour-1 && viewMinute >= minute || viewHour === hour);
+        });
+        break;
+        // Uses the past week Json file and filters users from past 24 hours based on day of the month.
+      case "day":
+        var filtered = data.filter(function (a) {
+          var viewHour = Number(a[2]);
+          var viewDate = Number(a[1]);
+          return (viewDate === dayOfMonth-1 && viewHour >= hour || viewDate === date);
+        })
+        break;
+        // Uses the past week Json file. No filter required.
+      default:
+        var filtered = data;
+    }
+    
+    // Adds the users together.
+    var toPrint = sumOfFiltered(filtered);
+    $('#user-visits > p').html(toPrint.toString());
+
+    function sumOfFiltered(filtered) {
+      var i;
+      var j = 0;
+      var viewColumn;
+      
+      for (i = 0; i < filtered.length; i++) {
+        j += Number(filtered[i][3]);
+      }
+      return j;
+    }
+  }
 }
 
-function updateCurrentUsers(time) {
+
+function updateCurrentUsers() {
   $.ajax({
     type: 'GET',
     url: ENDPOINTS.currentUsers.realTime,
@@ -172,7 +253,7 @@ function updateArticles(time) {
         title = toPrint[i-1][1];
         views = toPrint[i-1][4];
         $("#article-title-"+ i).html(i + ". " + title);
-        $("#article-view-" + i).html(views + "  <i class=\"fa fa-eye\" aria-hidden=\"true\"></i>");
+        $("#article-view-" + i).html(views + " views");
       }
     }
   }
