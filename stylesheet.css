@@ -3,32 +3,11 @@ html, body {
 }
 
 body {
-  color: white;
+  color: #fff;
   font-family: 'Roboto';
   font-size: 16px;
   margin: 0;
   background: #021317;
-}
-
-h2 {
-    font-size: 2.5em;
-    font-weight: 100;
-    margin-top: 5px;
-    margin-left: 15px;
-    margin-bottom: 5px;
-}
-
-.title-bar {
-    display:flex;
-    height: 11%;
-    margin-bottom: 1%;
-    flex: 1.5;
-}
-
-.title-bar div {
-    justify-content: center;
-    font-family: "Crimson Text";
-
 }
 
 .container {
@@ -40,12 +19,12 @@ h2 {
 header {
   display: flex;
   opacity: 0.7;
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: 100;
   padding-left: 2rem;
   padding-right: 2rem;
-  padding-top: 3rem;
-  padding-bottom: 3rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
 }
 
 main {
@@ -87,11 +66,11 @@ main {
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
   background: #082425;
-  line-height: 5.5rem;
+  line-height: 4rem;
   color: rgba(80, 227, 194, 0.5);
-  padding-left: 2rem;
-  padding-right: 2rem;
-  font-size: 2rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  font-size: 1.5rem;
   font-weight: 100;
 }
 
@@ -110,7 +89,7 @@ main {
   flex-direction:column;
   justify-content: space-between;
   border-color: #003333;
-  margin-right: 20px;
+  margin-right: 1rem;
 }
 
 .left .top {
@@ -130,6 +109,7 @@ main {
   text-align: center;
   border-left: thin solid #142125;
   display: flex;
+  flex: 1;
   align-items: center;
 }
 
@@ -142,14 +122,15 @@ main {
 }
 
 .stats__item p {
-  font-size: 3rem;
+  font-size: 2rem;
   font-weight: 500;
   margin-top: 0;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.025em;
 }
 
 .stats__item h3 {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   color: gray;
   margin: 0;
   font-weight: 100;
@@ -161,21 +142,7 @@ main {
 
 .right {
   flex: 3;
-  margin-left: 2rem;
-}
-
-.Stories-Header{
-    flex:0.19;
-    border:solid;
-    border-color: #003333;
-    background-color: #003333;
-    font-weight: 50;
-}
-
-.Story-Header{
-    color: #246e62;
-    margin-top: 25px;
-    margin-left: 25px;
+  margin-left: 1rem;
 }
 
 .articles {
@@ -184,7 +151,7 @@ main {
 
 .article {
   display: table-row;
-  font-size: 2rem;
+  font-size: 1.5rem;
 }
 
 .article > div {
@@ -207,15 +174,27 @@ main {
   text-align: right;
 }
 
-#current-users{
-    flex:1;
-    font-size: 1.5em;
+/* Chart Styles */
+
+.axis path,
+.axis line {
+  fill: none;
+  shape-rendering: crispEdges;
 }
-#user-visits{
-    flex:1;
-    font-size: 1.5em;
+
+.grid path,
+.grid line {
+  fill: none;
+  stroke: rgba(0, 0, 0, 0.25);
+  shape-rendering: crispEdges;
 }
-#page-views{
-    flex:1;
-    font-size: 1.5em;
+
+.x.axis path {
+  display: none;
+}
+
+.line {
+  fill: none;
+  stroke: #003333;
+  stroke-width: 8px;
 }

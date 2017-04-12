@@ -1,40 +1,3 @@
-<!DOCTYPE html>
-<meta charset="utf-8">
-<style>
-
-body {
-  font: 10px sans-serif;
-}
-
-.axis path,
-.axis line {
-  fill: none;
-  shape-rendering: crispEdges;
-}
-
-.grid path,
-.grid line {
-  fill: none;
-  stroke: rgba(0, 0, 0, 0.25);
-  shape-rendering: crispEdges;
-}
-
-.x.axis path {
-  display: none;
-}
-
-.line {
-  fill: none;
-  stroke: #003333;
-  stroke-width: 8px;
-}
-
-</style>
-<body>
-<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
-<script  type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
-<script>
-
 // Data endpoints JSON
 var ENDPOINTS = {
   'users': {
@@ -100,12 +63,13 @@ function filter(data) {
 var request = $.ajax({
   type: 'GET',
   url: ENDPOINTS.pageviews.hour,
-  dataType: 'jsonp'
+  dataType: 'jsonp',
+  //This only triggers if the ajax call was successful
+  //TODO: Define failure case
+  success: function(data) {
+    drawGraph(data);
+  }
 });
-
-//This only triggers if the ajax call was successful
-//TODO: Define failure case
-request.success(drawGraph)
 
 function drawGraph(reply){
   console.log('Here is the data from the ajax call')
@@ -117,27 +81,31 @@ function drawGraph(reply){
   console.log('and use it to draw the graph.')
 
 
+
   for (var i = 0; i < yData.length; i++) {
     xData.push(i);
   }
 
+  var width = $('#pageviews-chart').width(),
+      height = $('#pageviews-chart').height();
 
   var data = [ { label: "Page Views",
                  x: xData,
                  y: yData }, ] ;
 
   var xy_chart = d3_xy_chart()
-      .width(960)
-      .height(500)
+      .width(width)
+      .height(height)
       .xlabel("Time")
-      .ylabel("Page Views") ;
-  var svg = d3.select("body").append("svg")
+      .ylabel("Page Views");
+
+  var svg = d3.select("#pageviews-chart").append("svg")
       .datum(data)
       .call(xy_chart) ;
 
   function d3_xy_chart() {
-      var width = 640,
-          height = 480,
+      var width = width,
+          height = height,
           xlabel = "X Axis Label",
           ylabel = "Y Axis Label" ;
 
@@ -273,9 +241,4 @@ function drawGraph(reply){
       return chart;
   }
 
-
-
 }
-
-</script>
-</body>

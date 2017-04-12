@@ -27,6 +27,7 @@ function updatePageviews(time) {
     type: 'GET',
     url: ENDPOINTS.pageviews[time],
     dataType: 'jsonp',
+    jsonpCallback: 'callbackPageviews',
     success: function(data) {
       renderHTML(data, time);
     }
@@ -39,40 +40,38 @@ function updatePageviews(time) {
     var pageviews = 0;
 
     switch(time) {
-
       case "hour":
         pageviews = data.rows[hour][1];
-        $('#page-views > p').html(pageviews);
+        $('#page-views p').html(pageviews);
         break;
 
       case "day":
         pageviews = data.rows[day][1];
-        $('#page-views > p').html(pageviews);
+        $('#page-views p').html(pageviews);
         break;
 
-      default:
+      case "week":
         for (var i = 0; i < 7; i++) {
           pageviews += Number(data.rows[i][1]);
         }
-        $('#page-views > p').html(pageviews.toString());
+        $('#page-views p').html(pageviews.toString());
     }
   }
 }
 
 function updateUsers(time) {
 
-  var $usersite = $('#user-visits > p');
+  var $usersite = $('#user-visits p');
 
-  $(function() {
-    $.ajax({
-      type: 'GET',
-      url: ENDPOINTS.users.hour,
-      dataType: 'jsonp',
-      success: function(data) {
-        var hour = new Date().getHours();
-        $('#user-visits > p').html(data.rows[hour][1]);
-      }
-    });
+  $.ajax({
+    type: 'GET',
+    url: ENDPOINTS.users[time],
+    dataType: 'jsonp',
+    jsonpCallback: 'callbackUsers',
+    success: function(data) {
+      var hour = new Date().getHours();
+      $('#user-visits p').html(data.rows[hour][1]);
+    }
   });
 }
 
@@ -81,10 +80,11 @@ function updateCurrentUsers(time) {
     type: 'GET',
     url: ENDPOINTS.currentUsers.realTime,
     dataType: 'jsonp',
+    jsonpCallback: 'callbackCurrentUsers',
     success: function(data) {
       var lastElemRows = data.rows.length - 1;
       var currentUsers = data.rows[lastElemRows][3];
-      $('#current-users > p').html(currentUsers);
+      $('#current-users p').html(currentUsers);
     }
   });
 }
@@ -97,6 +97,7 @@ function updateArticles(time) {
     type: 'GET',
     url: ENDPOINTS.articles[time],
     dataType: 'jsonp',
+    jsonpCallback: 'callbackArticles',
     success: function(data) {
       renderHTML(data.rows, time);
     }
@@ -181,16 +182,14 @@ function updateArticles(time) {
 function updateStatsTimeRangeDisplay(time) {
   switch(time) {
     case "hour":
-      $('#stats-time-range').html("Statistics From The Past 60 Minutes");
+      $('.time-interval').text("60 minutes");
       break;
     case "day":
-      $('#stats-time-range').html("Statistics From The Past 24 Hours");
+      $('.time-interval').text("24 hours");
       break;
-    default:
-      $('#stats-time-range').html("Statistics From The Past 7 Days");
+    case "week":
+      $('.time-interval').text("7 days");
       break;
-
-
   }
 }
 
@@ -198,7 +197,7 @@ function updateStatsTimeRangeDisplay(time) {
 function updateClock() {
   var curTime = new Date();
 
-  var curDate = moment().format('dddd MMMM Do YYYY');
+  var curDate = moment().format('dddd, MMMM Do, YYYY');
   var curTime = moment().format('h:mm a');
 
   $('#date').html(curDate);
@@ -219,7 +218,7 @@ function updateTimePeriod(time) {
       return "day";
     case "day":
       return "week";
-    default:
+    case "week":
       return "hour";
   }
 }

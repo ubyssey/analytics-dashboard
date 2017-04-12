@@ -2,9 +2,10 @@
   <head>
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Crimson+Text" />
     <link rel="stylesheet" type="text/css" href="stylesheet.css">
-    <script src="https://use.fontawesome.com/432212f1dd.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
+    <script type="text/javascript" src="https://use.fontawesome.com/432212f1dd.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
+    <script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
   </head>
   <body>
 
@@ -20,14 +21,12 @@
         <div class="left">
 
           <div class="box top">
-            <div id="stats-time-range" class="box__header">Statistics From The Past Hour</div>
-            <div class="left-half-top-chart">
-              <!-- <object type="text/html" data="graph2.html" style="overflow:auto; width: 100%; height: 100%;"></object> -->
-            </div>
+            <div id="stats-time-range" class="box__header">Page views in the past <span class="time-interval">hour</span></div>
+            <div id="pageviews-chart" class="box__content"></div>
           </div>
 
           <div class="box bottom">
-            <div id="stats-time-range" class="box__header">Statistics From The Past Hour</div>
+            <div id="stats-time-range" class="box__header">Statistics from the past <span class="time-interval">hour</span></div>
             <div class="box__content box__content--no-padding stats">
               <div class="stats__item" id="current-users">
                 <div>
@@ -54,7 +53,7 @@
 
         <div class="right">
           <div class="box">
-            <div class="box__header">Top 5 Stories</div>
+            <div class="box__header">Top 5 stories from the past <span class="time-interval">hour</span></div>
             <div class="box__content articles">
               <div class="article">
                 <div class="number">1</div>
@@ -87,5 +86,6 @@
       </main>
     </div>
     <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript" src="js/chart.js"></script>
   </body>
 </html>
