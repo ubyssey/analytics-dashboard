@@ -1,13 +1,13 @@
+var date = new Date();
+var hour = date.getHours();
 // Filter out an array with the users in past 60 minutes
 function filter(data) {
-  //this gives you an array of tuples where the first element is the hour and the last element is the # of users
+  // this gives you an array of tuples where the first element is the hour, second element is the minute and the last element is the # of users
   var result = data.rows.map(
     function(elem) {
       return [elem[0], elem[1], elem[2]]
     })
 
-  var date = new Date();
-  var hour = date.getHours();
   var minute = date.getMinutes();
   var x = [];
 
@@ -47,6 +47,17 @@ var request = $.ajax({
   }
 });
 
+function formatTime(data) {
+  if(data < 10) {
+    data = "0" + data;
+  }
+  return data;
+}
+
+function getHour() {
+  return hour;
+}
+
 function drawGraph(reply){
   console.log('Here is the data from the ajax call')
   console.log(reply)
@@ -65,15 +76,13 @@ function drawGraph(reply){
   var width = $('#pageviews-chart').width(),
       height = $('#pageviews-chart').height();
 
-  var data = [ { label: "Page Views",
+  var data = [ { label: "",
                  x: xData,
                  y: yData }, ] ;
 
   var xy_chart = d3_xy_chart()
       .width(width)
       .height(height)
-      .xlabel("Time")
-      .ylabel("Page Views");
 
   var svg = d3.select("#pageviews-chart").append("svg")
       .datum(data)
@@ -101,7 +110,7 @@ function drawGraph(reply){
 
               var y_scale = d3.scale.linear()
                   .range([innerheight, 0])
-                  .domain([ d3.min(datasets, function(d) { return d3.min(d.y); }),
+                  .domain([ d3.min(datasets, function(d) { return 0; }),
                             d3.max(datasets, function(d) { return d3.max(d.y); }) ]) ;
 
               var color_scale = d3.scale.category10()
@@ -109,28 +118,24 @@ function drawGraph(reply){
 
               var x_axis = d3.svg.axis()
                   .scale(x_scale)
-                  .orient("bottom") ;
+                  .orient("bottom")
+                  .tickFormat(function(d) { return getHour() + ':' + formatTime(d); });
 
               var y_axis = d3.svg.axis()
                   .scale(y_scale)
-                  .orient("left") ;
-
-                  var x_grid = d3.svg.axis()
-                      .scale(x_scale)
-                      .orient("bottom")
-                      .tickSize(-innerheight)
-                      .tickFormat("") ;
-
-                  var y_grid = d3.svg.axis()
-                      .scale(y_scale)
-                      .orient("left")
-                      .tickSize(-innerwidth)
-                      .tickFormat("") ;
+                  .orient("left")
+                  .ticks(8)
+                  .tickSize(-width);
 
               var draw_line = d3.svg.line()
-                  .interpolate("basis")
+                  .interpolate("linear")
                   .x(function(d) { return x_scale(d[0]); })
                   .y(function(d) { return y_scale(d[1]); }) ;
+
+              var area = d3.svg.area()
+                  .x(function(d) { return x_scale(d[0]); })
+                  .y0(height)
+                  .y1(function(d) { return y_scale(d[1]); });
 
               var svg = d3.select(this)
                   .attr("width", width)
@@ -138,24 +143,6 @@ function drawGraph(reply){
                   .append("g")
                   .attr("transform", "translate(" + margin.left + "," + margin.top + ")") ;
 
-              svg.append("g")
-                  .attr("class", "x grid")
-                  .attr("transform", "translate(0," + innerheight + ")")
-                  .call(x_grid) ;
-
-              svg.append("g")
-                  .attr("class", "y grid")
-                  .call(y_grid) ;
-
-              svg.append("g")
-                  .attr("class", "x axis")
-                  .attr("transform", "translate(0," + innerheight + ")")
-                  .call(x_axis)
-                  .append("text")
-                  .attr("dy", "-.71em")
-                  .attr("x", innerwidth)
-                  .style("text-anchor", "end")
-                  .text(xlabel) ;
 
               svg.append("g")
                   .attr("class", "y axis")
@@ -163,14 +150,35 @@ function drawGraph(reply){
                   .append("text")
                   .attr("transform", "rotate(-90)")
                   .attr("y", 6)
-                  .attr("dy", "0.71em")
-                  .style("text-anchor", "end")
-                  .text(ylabel) ;
+
+                  svg.append("g")
+                      .attr("class", "x axis")
+                      .attr("transform", "translate(0," + (height - 50) + ")")
+                      .style("fill", "red")
+                      .call(x_axis)
+                      .append("text")
+                      .attr("x", 6)
+
+                  svg.append("g")
+                     .datum(datasets)
+                     .attr("class", "area")
+                     .attr("d", area);
+
+
 
               var data_lines = svg.selectAll(".d3_xy_chart_line")
                   .data(datasets.map(function(d) {return d3.zip(d.x, d.y);}))
                   .enter().append("g")
                   .attr("class", "d3_xy_chart_line") ;
+
+              var data_circles = svg.selectAll(".d3_xy_chart_circle")
+                  .data(d3.zip(datasets[0].x, datasets[0].y))
+                  .enter().append("circle")
+                  .attr("r", 5)
+                  .attr("class", "d3_xy_chart_circle")
+                  .attr("cx", function(d) { return x_scale(d[0]) })
+                  .attr("cy", function(d) { return y_scale(d[1]) })
+
 
               data_lines.append("path")
                   .attr("class", "line")
