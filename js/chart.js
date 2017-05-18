@@ -1,5 +1,9 @@
+// Wrapped in an updateGraph function.
+function updateGraph() {
+  $('#pageviews-chart').empty();
 var date = new Date();
 var hour = date.getHours();
+  var minute = date.getMinutes();
 // Filter out an array with the users in past 60 minutes
 function filter(data) {
   // this gives you an array of tuples where the first element is the hour, second element is the minute and the last element is the # of users
@@ -27,7 +31,8 @@ function filter(data) {
     if(counter == 59) {
       counter = 0;
     }
-    if((result[i][0] == (hour-1)) && (result[i][1] >= counter)) {
+    // Fixed the filter function. This was causing the data points to disappear.
+    if((result[i][0] == (hour-1)) && (result[i][1] >= counter) || result[i][0] == hour) {
       x.push(Number(result[i][2]));
       counter++;
     }
@@ -53,18 +58,21 @@ function formatTime(data) {
   }
   return data;
 }
-
+  
+// redundant function
+/*
 function getHour() {
   return hour;
 }
-
+*/
+  
 function drawGraph(reply){
   console.log('Here is the data from the ajax call')
   console.log(reply)
   console.log('now we can filter it!')
   var yData = filter(reply)
   var xData = []
-  console.log(xData)
+  console.log(yData)
   console.log('and use it to draw the graph.')
 
 
@@ -119,7 +127,8 @@ function drawGraph(reply){
               var x_axis = d3.svg.axis()
                   .scale(x_scale)
                   .orient("bottom")
-                  .tickFormat(function(d) { return getHour() + ':' + formatTime(d); });
+              // Changed "return getHour()" to "return Hour".
+                  .tickFormat(function(d) { return hour + ':' + formatTime(d); });
 
               var y_axis = d3.svg.axis()
                   .scale(y_scale)
@@ -226,3 +235,11 @@ function drawGraph(reply){
   }
 
 }
+
+}
+
+// Updates every 5 seconds. This function can be called in index.js for final copy.
+$(document).ready(function() {
+  updateGraph();
+setInterval(updateGraph, 5000);
+});
