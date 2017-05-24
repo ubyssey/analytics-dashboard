@@ -25,16 +25,33 @@ function filter(data) {
   });
 
   // push number of pageviews in the past 60 minutes to an array
-  var counter = minute;
+  // Since the proxy is delayed, we are taking the data from a 60 minute time frame
+  // which ends at 10 minutes prior to current time
+  // ie: if it is 6:20pm, we take data in an array from  [5:10pm to 6:10pm]
+  var counter = 0;
+  var counter2 = 0;
+  var subtractHour1 = 0;
+  var subtractHour2 = 0;
+  if(minute < 10) {
+    subtractHour1 = subtractHour1 + 2;
+    subtractHour2++;
+  } else {
+    counter = minute - 10;
+    subtractHour1++;
+  }
   for(var i = 0; i < result.length; i++) {
     // reset counter after 60 min mark
     if(counter == 59) {
       counter = 0;
     }
     // Fixed the filter function. This was causing the data points to disappear.
-    if((result[i][0] == (hour-1)) && (result[i][1] >= counter) || result[i][0] == hour) {
+    if((result[i][0] == (hour-subtractHour1)) && (result[i][1] >= counter) || result[i][0] == hour-subtractHour2) {
+      if(counter2 > 60) {
+        break;
+      }
       x.push(Number(result[i][2]));
       counter++;
+      counter2++;
     }
   }
   // filtered array in past hour
@@ -58,14 +75,8 @@ function formatTime(data) {
   }
   return data;
 }
-  
-// redundant function
-/*
-function getHour() {
-  return hour;
-}
-*/
-  
+
+
 function drawGraph(reply){
   console.log('Here is the data from the ajax call')
   console.log(reply)
