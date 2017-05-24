@@ -32,6 +32,8 @@ function filter(data) {
   var counter2 = 0;
   var subtractHour1 = 0;
   var subtractHour2 = 0;
+
+  // This is just counter logic to
   if(minute < 10) {
     subtractHour1 = subtractHour1 + 2;
     subtractHour2++;
@@ -39,6 +41,8 @@ function filter(data) {
     counter = minute - 10;
     subtractHour1++;
   }
+
+
   for(var i = 0; i < result.length; i++) {
     // reset counter after 60 min mark
     if(counter == 59) {
@@ -46,7 +50,7 @@ function filter(data) {
     }
     // Fixed the filter function. This was causing the data points to disappear.
     if((result[i][0] == (hour-subtractHour1)) && (result[i][1] >= counter) || result[i][0] == hour-subtractHour2) {
-      if(counter2 > 60) {
+      if(counter2 >= 60) {
         break;
       }
       x.push(Number(result[i][2]));
