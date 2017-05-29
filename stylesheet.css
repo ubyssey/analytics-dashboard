@@ -221,4 +221,5 @@ main {
 
 .area {
   fill: #003333;
+  stroke-width: 0;
 }

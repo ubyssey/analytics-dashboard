@@ -151,15 +151,16 @@ function drawGraph(reply){
                   .ticks(8)
                   .tickSize(-width);
 
+              var area = d3.svg.area()
+                  .x(function(d) { return x_scale(d[0]); })
+                  .y0(height)
+                  .y1(function(d) { return y_scale(d[1]); });
+
               var draw_line = d3.svg.line()
                   .interpolate("linear")
                   .x(function(d) { return x_scale(d[0]); })
                   .y(function(d) { return y_scale(d[1]); }) ;
 
-              var area = d3.svg.area()
-                  .x(function(d) { return x_scale(d[0]); })
-                  .y0(height)
-                  .y1(function(d) { return y_scale(d[1]); });
 
               var svg = d3.select(this)
                   .attr("width", width)
@@ -175,18 +176,14 @@ function drawGraph(reply){
                   .attr("transform", "rotate(-90)")
                   .attr("y", 6)
 
-                  svg.append("g")
-                      .attr("class", "x axis")
-                      .attr("transform", "translate(0," + (height - 50) + ")")
-                      .style("fill", "red")
-                      .call(x_axis)
-                      .append("text")
-                      .attr("x", 6)
+              svg.append("g")
+                  .attr("class", "x axis")
+                  .attr("transform", "translate(0," + (height - 50) + ")")
+                  .style("fill", "red")
+                  .call(x_axis)
+                  .append("text")
+                  .attr("x", 6)
 
-                  svg.append("g")
-                     .datum(datasets)
-                     .attr("class", "area")
-                     .attr("d", area);
 
 
 
@@ -204,6 +201,7 @@ function drawGraph(reply){
                   .attr("cy", function(d) { return y_scale(d[1]) })
 
 
+
               data_lines.append("path")
                   .attr("class", "line")
                   .attr("d", function(d) {return draw_line(d); })
@@ -218,6 +216,10 @@ function drawGraph(reply){
                   .attr("dy", ".35em")
                   .attr("fill", function(_, i) { return color_scale(i); })
                   .text(function(d) { return d.name; }) ;
+
+                  data_lines.append("path")
+                      .attr("class", "area")
+                      .attr("d", area);
 
           }) ;
       }
@@ -256,5 +258,5 @@ function drawGraph(reply){
 // Updates every 5 seconds. This function can be called in index.js for final copy.
 $(document).ready(function() {
   updateGraph();
-setInterval(updateGraph, 5000);
+setInterval(updateGraph, 50000);
 });
