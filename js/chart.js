@@ -142,7 +142,6 @@ function drawGraph(reply){
               var x_axis = d3.svg.axis()
                   .scale(x_scale)
                   .orient("bottom")
-              // Changed "return getHour()" to "return Hour".
                   .tickFormat(function(d) { return hour + ':' + formatTime(d); });
 
               var y_axis = d3.svg.axis()
@@ -153,7 +152,7 @@ function drawGraph(reply){
 
               var area = d3.svg.area()
                   .x(function(d) { return x_scale(d[0]); })
-                  .y0(height)
+                  .y0(height - 50)
                   .y1(function(d) { return y_scale(d[1]); });
 
               var draw_line = d3.svg.line()
@@ -168,44 +167,47 @@ function drawGraph(reply){
                   .append("g")
                   .attr("transform", "translate(" + margin.left + "," + margin.top + ")") ;
 
-
-              svg.append("g")
-                  .attr("class", "y axis")
-                  .call(y_axis)
-                  .append("text")
-                  .attr("transform", "rotate(-90)")
-                  .attr("y", 6)
-
-              svg.append("g")
-                  .attr("class", "x axis")
-                  .attr("transform", "translate(0," + (height - 50) + ")")
-                  .style("fill", "red")
-                  .call(x_axis)
-                  .append("text")
-                  .attr("x", 6)
-
-
-
-
               var data_lines = svg.selectAll(".d3_xy_chart_line")
                   .data(datasets.map(function(d) {return d3.zip(d.x, d.y);}))
                   .enter().append("g")
                   .attr("class", "d3_xy_chart_line") ;
 
-              var data_circles = svg.selectAll(".d3_xy_chart_circle")
-                  .data(d3.zip(datasets[0].x, datasets[0].y))
-                  .enter().append("circle")
-                  .attr("r", 5)
-                  .attr("class", "d3_xy_chart_circle")
-                  .attr("cx", function(d) { return x_scale(d[0]) })
-                  .attr("cy", function(d) { return y_scale(d[1]) })
-
+                  svg.append("g")
+                      .attr("class", "y axis")
+                      .call(y_axis)
+                      .append("text")
+                      .attr("transform", "rotate(-g90)")
+                      .attr("y", 6)
 
 
               data_lines.append("path")
                   .attr("class", "line")
                   .attr("d", function(d) {return draw_line(d); })
                   .attr("stroke", function(_, i) {return color_scale(i);}) ;
+
+
+              data_lines.append("path")
+                  .attr("class", "area")
+                  .attr("d", area);
+
+
+                  var data_circles = svg.selectAll(".d3_xy_chart_circle")
+                    .data(d3.zip(datasets[0].x, datasets[0].y))
+                      .enter().append("circle")
+                      .attr("r", 5)
+                      .attr("class", "d3_xy_chart_circle")
+                      .attr("cx", function(d) { return x_scale(d[0]) })
+                      .attr("cy", function(d) { return y_scale(d[1]) })
+
+
+              svg.append("g")
+                  .attr("class", "x axis")
+                  .attr("transform", "translate(0," + (height - 45) + ")")
+                  .style("fill", "red")
+                  .call(x_axis)
+                  .append("text")
+                  .attr("x", 6)
+
 
               data_lines.append("text")
                   .datum(function(d, i) { return {name: datasets[i].label, final: d[d.length-1]}; })
@@ -217,9 +219,7 @@ function drawGraph(reply){
                   .attr("fill", function(_, i) { return color_scale(i); })
                   .text(function(d) { return d.name; }) ;
 
-                  data_lines.append("path")
-                      .attr("class", "area")
-                      .attr("d", area);
+
 
           }) ;
       }
