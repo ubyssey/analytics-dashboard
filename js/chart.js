@@ -81,6 +81,7 @@ function formatTime(data) {
 }
 
 
+
 function drawGraph(reply){
   console.log('Here is the data from the ajax call')
   console.log(reply)
@@ -127,6 +128,7 @@ function drawGraph(reply){
                   innerheight = height - margin.top - margin.bottom ;
 
               var x_scale = d3.scale.linear()
+//                  .domain([new Date(2012, 0, 1), new Date(2013, 0, 1)])
                   .range([0, innerwidth])
                   .domain([ d3.min(datasets, function(d) { return d3.min(d.x); }),
                             d3.max(datasets, function(d) { return d3.max(d.x); }) ]) ;
@@ -139,10 +141,11 @@ function drawGraph(reply){
               var color_scale = d3.scale.category10()
                   .domain(d3.range(datasets.length)) ;
 
+
               var x_axis = d3.svg.axis()
                   .scale(x_scale)
                   .orient("bottom")
-                  .tickFormat(function(d) { return hour + ':' + formatTime(d); });
+                  .tickFormat(function(d) { return (hour-1) + ':' + formatTime(d); })
 
               var y_axis = d3.svg.axis()
                   .scale(y_scale)
