@@ -3,7 +3,7 @@ function updateGraph() {
   $('#pageviews-chart').empty();
 var date = new Date();
 var hour = date.getHours();
-  var minute = date.getMinutes();
+var minute = date.getMinutes();
 // Filter out an array with the users in past 60 minutes
 function filter(data) {
   // this gives you an array of tuples where the first element is the hour, second element is the minute and the last element is the # of users
@@ -33,7 +33,6 @@ function filter(data) {
   var subtractHour1 = 0;
   var subtractHour2 = 0;
 
-  // This is just counter logic to
   if(minute < 10) {
     subtractHour1 = subtractHour1 + 2;
     subtractHour2++;
@@ -73,13 +72,38 @@ var request = $.ajax({
   }
 });
 
-function formatTime(data) {
-  if(data < 10) {
-    data = "0" + data;
+
+function formatMinute(data) {
+  // start time range from
+  var temp = data + minute - 10;
+  if(temp < 0) {
+    temp = 60 + temp;
   }
-  return data;
+  if(temp > 60) {
+    temp = temp - 60;
+    if(temp < 10) {
+      temp = "0" + temp;
+    }
+    return temp;
+  }
+  return temp;
 }
 
+
+function formatHour(data) {
+  var temp = data + minute - 10;
+  var tempHour = hour;
+  // If hour is negative, we are taking a time range starting from 2 hours prior to
+  // current hour
+  if(temp < 0) {
+    tempHour--;
+  }
+  if(temp < 60) {
+    return tempHour - 1;
+  } else {
+    return tempHour;
+  }
+}
 
 
 function drawGraph(reply){
@@ -127,8 +151,8 @@ function drawGraph(reply){
                   innerwidth = width - margin.left - margin.right,
                   innerheight = height - margin.top - margin.bottom ;
 
+
               var x_scale = d3.scale.linear()
-//                  .domain([new Date(2012, 0, 1), new Date(2013, 0, 1)])
                   .range([0, innerwidth])
                   .domain([ d3.min(datasets, function(d) { return d3.min(d.x); }),
                             d3.max(datasets, function(d) { return d3.max(d.x); }) ]) ;
@@ -145,7 +169,7 @@ function drawGraph(reply){
               var x_axis = d3.svg.axis()
                   .scale(x_scale)
                   .orient("bottom")
-                  .tickFormat(function(d) { return (hour-1) + ':' + formatTime(d); })
+                  .tickFormat(function(d) { return formatHour(d) + ':' + formatMinute(d); })
 
               var y_axis = d3.svg.axis()
                   .scale(y_scale)
