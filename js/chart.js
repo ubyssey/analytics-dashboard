@@ -5,7 +5,7 @@ var date = new Date();
 var hour = date.getHours();
 var minute = date.getMinutes();
 // Filter out an array with the users in past 60 minutes
-function filter(data) {
+function filterHour(data) {
   // this gives you an array of tuples where the first element is the hour, second element is the minute and the last element is the # of users
   var result = data.rows.map(
     function(elem) {
@@ -26,12 +26,9 @@ function filter(data) {
 
   // push number of pageviews in the past 60 minutes to an array
   // Since the proxy is delayed, we are taking the data from a 60 minute time frame
-  // which ends at 10 minutes prior to current time
+  // which ends at 10 minutes prior to the current time
   // ie: if it is 6:20pm, we take data in an array from  [5:10pm to 6:10pm]
-  var counter = 0;
-  var counter2 = 0;
-  var subtractHour1 = 0;
-  var subtractHour2 = 0;
+  var counter = counter2 = subtractHour1 = subtractHour2 = 0;
 
   if(minute < 10) {
     subtractHour1 = subtractHour1 + 2;
@@ -59,6 +56,28 @@ function filter(data) {
   }
   // filtered array in past hour
   return x;
+}
+
+function filterDay(data) {
+  // this gives you an array of tuples where the first element is the hour, second element is the minute and the last element is the # of users
+  var result = data.rows.map(
+    function(elem) {
+      return [elem[0], elem[1], elem[2]]
+    })
+
+    var minute = date.getMinutes();
+    var x = [];
+
+    // sort result by hour and minute in ascending order
+    result.sort(function(a, b) {
+      var n = a[0] - b[0];
+      if(n !== 0) {
+        return n;
+      }
+      return parseInt(a[1]) - parseInt(b[1]);
+    });
+
+    //TODO: write function that takes an array of every hour in the past 24 hrs
 }
 
 var request = $.ajax({
@@ -110,7 +129,7 @@ function drawGraph(reply){
   console.log('Here is the data from the ajax call')
   console.log(reply)
   console.log('now we can filter it!')
-  var yData = filter(reply)
+  var yData = filterHour(reply)
   var xData = []
   console.log(yData)
   console.log('and use it to draw the graph.')
@@ -277,9 +296,7 @@ function drawGraph(reply){
 
       return chart;
   }
-
 }
-
 }
 
 // Updates every 5 seconds. This function can be called in index.js for final copy.
@@ -304,11 +321,8 @@ $(document).ready(function() {
   var time = "week";
   updateGraph(time);
   setInterval(function() {
-    updateData(time);
+    updateGraph(time);
   }, 15000);
-
-  updateClock();
-  setInterval(updateClock, 1000);
 
   setInterval(function() {
     time = updateTimePeriod(time);
