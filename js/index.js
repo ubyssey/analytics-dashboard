@@ -51,7 +51,7 @@ function updatePageviews(time) {
     var minute = date.getMinutes();
 
     switch(time) {
-        // Uses the past day Json file and filters pageviews from past 60 minutes.
+        // Uses the past day JSON data and filters pageviews from past 60 minutes.
       case "hour":
         var filtered = data.filter(function (a) {
           var viewHour = Number(a[0]);
@@ -59,7 +59,7 @@ function updatePageviews(time) {
           return (viewHour === hour-1 && viewMinute >= minute || viewHour === hour);
         });
         break;
-        // Uses the past week Json file and filters pageviews from past 24 hours based on day of the month.
+        // Uses the past week JSON data and filters pageviews from past 24 hours based on day of the month.
       case "day":
         var filtered = data.filter(function (a) {
           var viewHour = Number(a[0]);
@@ -67,7 +67,7 @@ function updatePageviews(time) {
           return (viewDate === dayOfMonth-1 && viewHour >= hour || viewDate === date);
         });
         break;
-        // Uses the past week Json file. No filter required.
+        // Uses the past week JSON data. No filter required.
       default:
         var filtered = data;
     }
@@ -121,15 +121,15 @@ function updateUsers(time) {
     var minute = date.getMinutes();
 
     switch (time) {
-        // Uses the past day Json file and filters pageviews from the last 60 minutes.
+        // Uses the past day JSON data and filters pageviews from the last 60 minutes.
       case "hour":
         var filtered = data.filter(function (a) {
           var viewHour = Number(a[1]);
           var viewMinute = Number(a[2]);
           return (viewHour === hour-1 && viewMinute >= minute || viewHour === hour);
-        });
+        })
         break;
-        // Uses the past week Json file and filters users from past 24 hours based on day of the month.
+        // Uses the past week JSON data and filters users from past 24 hours based on day of the month.
       case "day":
         var filtered = data.filter(function (a) {
           var viewHour = Number(a[2]);
@@ -137,7 +137,7 @@ function updateUsers(time) {
           return (viewDate === dayOfMonth-1 && viewHour >= hour || viewDate === date);
         })
         break;
-        // Uses the past week Json file. No filter required.
+        // Uses the past week JSON data. No filter required.
       default:
         var filtered = data;
     }

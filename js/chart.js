@@ -1,5 +1,5 @@
 // Wrapped in an updateGraph function.
-function updateGraph() {
+function updateGraph(time) {
   $('#pageviews-chart').empty();
 var date = new Date();
 var hour = date.getHours();
@@ -283,7 +283,34 @@ function drawGraph(reply){
 }
 
 // Updates every 5 seconds. This function can be called in index.js for final copy.
+// $(document).ready(function() {
+//   updateGraph();
+// setInterval(updateGraph, 50000);
+// });
+
+function updateTimePeriod(time) {
+  switch(time) {
+    case "hour":
+      return "day";
+    case "day":
+      return "week";
+    case "week":
+      return "hour";
+  }
+}
+
+// Updates every 5 seconds. This function can be called in index.js for final copy.
 $(document).ready(function() {
-  updateGraph();
-setInterval(updateGraph, 50000);
+  var time = "week";
+  updateGraph(time);
+  setInterval(function() {
+    updateData(time);
+  }, 15000);
+
+  updateClock();
+  setInterval(updateClock, 1000);
+
+  setInterval(function() {
+    time = updateTimePeriod(time);
+  }, 15000);
 });
