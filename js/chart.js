@@ -65,7 +65,8 @@ function filterDay(data) {
       return [elem[0], elem[1], elem[2]]
     })
 
-    var minute = date.getMinutes();
+    var hour = date.getHours();
+    // the array which will contain all the data points for amount of users
     var x = [];
 
     // sort result by hour and minute in ascending order
@@ -77,19 +78,48 @@ function filterDay(data) {
       return parseInt(a[1]) - parseInt(b[1]);
     });
 
+    // the array which will contain the
+    var y = [];
+
     //TODO: write function that takes an array of every hour in the past 24 hrs
+    for(var i = 0; i < 24; i++) {
+      y[i] = getAvgUsersInHour(result, i);
+    }
+    console.log(y);
+
+    var tempHour = hour;
+    var startHour;
+    if(hour + 1 == 25) {
+      startHour = 0;
+    } else {
+      startHour = hour + 1;
+    }
+
+    for(var j = 0; j < 24; j++) {
+      x[i] = y[startHour];
+      if(startHour + 1 == 25) {
+        startHour = 0;
+      } else {
+        startHour++
+      }
+    }
+
+    return x;
 }
 
-var request = $.ajax({
-  type: 'GET',
-  url: ENDPOINTS.pageviews.hour,
-  dataType: 'jsonp',
-  //This only triggers if the ajax call was successful
-  //TODO: Define failure case
-  success: function(data) {
-    drawGraph(data);
+// Get the average amount of user traffic in the specified hour
+function getAvgUsersInHour(result, hour) {
+  var arrayCount = 0;
+  var total = 0;
+  var avg = 0;
+  for(var i = 0; i < result.length; i++) {
+    if(result[i][2] == hour) {
+      total += result[i][2];
+      arrayCount++;
+    }
   }
-});
+  return avg = total / arrayCount;
+}
 
 
 function formatMinute(data) {
@@ -124,12 +154,57 @@ function formatHour(data) {
   }
 }
 
+function updateTimePeriod(time) {
+  switch(time) {
+    case "hour":
+      return "day";
+    case "day":
+      return "hour";
+  }
+}
 
-function drawGraph(reply){
+// This runs once the page is ready to be loaded.
+$(document).ready(function() {
+  var time = "day";
+  updateGraph(time);
+  setInterval(function() {
+    updateGraph(time);
+  }, 15000);
+
+  setInterval(updateClock, 1000);
+
+  setInterval(function() {
+    time = updateTimePeriod(time);
+  }, 15000);
+});
+
+function updateGraph(time) {
+  var request = $.ajax({
+    type: 'GET',
+    url: ENDPOINTS.pageviews.hour,
+    dataType: 'jsonp',
+    //This only triggers if the ajax call was successful
+    //TODO: Define failure case
+    success: function(data) {
+      drawGraph(data, time);
+    }
+  });
+}
+
+function drawGraph(reply, time){
   console.log('Here is the data from the ajax call')
   console.log(reply)
   console.log('now we can filter it!')
-  var yData = filterHour(reply)
+
+  //TODO: change filderDay to filterHour when done debugging
+  var yData;
+  if(time == hour) {
+    yData = filterDay(reply);
+  }
+  else {
+    yData = filterDay(reply);
+  }
+
   var xData = []
   console.log(yData)
   console.log('and use it to draw the graph.')
