@@ -103,7 +103,6 @@ function filterDay(data) {
         startHour++
       }
     }
-
     return x;
 }
 
@@ -113,12 +112,16 @@ function getAvgUsersInHour(result, hour) {
   var total = 0;
   var avg = 0;
   for(var i = 0; i < result.length; i++) {
-    if(result[i][2] == hour) {
+    if(result[i][0] == hour) {
       total += result[i][2];
       arrayCount++;
     }
   }
-  return avg = total / arrayCount;
+  avg = total / arrayCount;
+  console.log("here is the avg");
+  console.log(result[2][2])
+  console.log(avg);
+  return avg;
 }
 
 
