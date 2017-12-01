@@ -77,15 +77,17 @@ function filterDay(data) {
       }
       return parseInt(a[1]) - parseInt(b[1]);
     });
-
-    // the array which will contain the
+    console.log("Day results")
+    console.log(result)
+    // the array which will contain the amount of users in 24hr period
     var y = [];
 
     //TODO: write function that takes an array of every hour in the past 24 hrs
     for(var i = 0; i < 24; i++) {
       y[i] = getAvgUsersInHour(result, i);
+      console.log("Avg users in hour")
+      console.log(y[i])
     }
-    console.log(y);
 
     var tempHour = hour;
     var startHour;
@@ -118,9 +120,6 @@ function getAvgUsersInHour(result, hour) {
     }
   }
   avg = total / arrayCount;
-  console.log("here is the avg");
-  console.log(result[2][2])
-  console.log(avg);
   return avg;
 }
 
